@@ -9,6 +9,8 @@ import Gallery from '../components/landing/Gallery';
 import ScoopBuilder from '../components/landing/ScoopBuilder';
 import Rewards from '../components/landing/Rewards';
 import { CONTAINERS, SCOOP_SIZES, flavors, formatPrice } from '../data/flavors';
+import { bgImage, images } from '../data/images';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 const MARQUEE = ['Slow-churned daily', 'Fresh cream', 'Hand-pulped fruit', 'Waffle cones rolled in-house', 'No artificial colours', 'Small batches'];
 
@@ -25,6 +27,7 @@ const REVIEWS = [
 ];
 
 export default function Home() {
+  usePageTitle();
   const [selected, setSelected] = useState(null);
   const [email, setEmail] = useState('');
   const [joined, setJoined] = useState(false);
@@ -46,17 +49,15 @@ export default function Home() {
     <>
       <Hero />
 
-      {/* ================= Marquee + melting edge ================= */}
       <div className="marquee" aria-hidden="true">
         <div className="marquee__track">
           {[...MARQUEE, ...MARQUEE].map((m, i) => (
-            <span className="marquee__item" key={i}>{m}</span>
+            <span className="marquee__item" key={`${m}-${i}`}>{m}</span>
           ))}
         </div>
       </div>
       <DripEdge />
 
-      {/* ================= How would you like it ================= */}
       <section className="section lp-containers">
         <div className="container">
           <Reveal className="lp-title">
@@ -69,8 +70,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Menu board ================= */}
-      <section className="section lp-menu lp-menu--after bg-photo bg-photo--cream" id="menu" style={{ '--img': 'url(/images/mango-scoops.jpg)' }}>
+      <section className="section lp-menu lp-menu--after bg-photo bg-photo--cream" id="menu" style={{ '--img': bgImage(images.mangoScoops) }}>
         <div className="container">
           <Reveal className="lp-title">
             <span className="eyebrow">The Menu</span>
@@ -85,7 +85,7 @@ export default function Home() {
                   <li key={f.id}>
                     <button type="button" className="menu-row" onClick={() => setSelected(f)}>
                       <span className="menu-row__icon">
-                        <Scoop scoops={[f.color]} vessel={f.vessel} topping="none" size={44} />
+                        <Scoop scoops={[f.color]} vessel={f.vessel} topping="none" size={44} title="" />
                       </span>
                       <span className="menu-row__text">
                         <span className="menu-row__line">
@@ -118,7 +118,14 @@ export default function Home() {
 
             <Reveal className="menu-board__photo" delay={150}>
               <figure className="frame">
-                <img src="/images/waffle-bowl.jpg" alt="Two scoops of ice cream in a crisp waffle bowl" loading="lazy" />
+                <img
+                  src={images.waffleBowl}
+                  alt="Two scoops of ice cream in a crisp waffle bowl"
+                  width="800"
+                  height="1000"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <figcaption>Churned fresh every morning</figcaption>
               </figure>
               <Seal className="menu-board__seal" />
@@ -127,8 +134,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Parallax quote ================= */}
-      <section className="parallax" style={{ '--img': 'url(/images/chocolate-cones.jpg)' }}>
+      <section className="parallax" style={{ '--img': bgImage(images.chocolateCones) }}>
         <div className="container parallax__inner">
           <Reveal>
             <Ornament light />
@@ -140,8 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Builder ================= */}
-      <section className="section lp-builder bg-photo bg-photo--cream" id="builder" style={{ '--img': 'url(/images/sprinkle-bowl.jpg)' }}>
+      <section className="section lp-builder bg-photo bg-photo--cream" id="builder" style={{ '--img': bgImage(images.sprinkleBowl) }}>
         <div className="container">
           <Reveal className="lp-title">
             <span className="eyebrow">Made to order</span>
@@ -155,8 +160,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Rewards ================= */}
-      <section className="section lp-rewards bg-photo bg-photo--gray" id="rewards" style={{ '--img': 'url(/images/popsicles.jpg)' }}>
+      <section className="section lp-rewards bg-photo bg-photo--gray" id="rewards" style={{ '--img': bgImage(images.popsicles) }}>
         <div className="container">
           <Reveal className="lp-title">
             <span className="eyebrow">Mango Rewards Club</span>
@@ -171,7 +175,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Gallery ================= */}
       <section className="section lp-gallery" id="gallery">
         <div className="container">
           <Reveal className="lp-title">
@@ -183,8 +186,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Craft ================= */}
-      <section className="section lp-craft" style={{ '--img': 'url(/images/cones-flatlay.jpg)' }}>
+      <section className="section lp-craft" style={{ '--img': bgImage(images.conesFlatlay) }}>
         <div className="container">
           <Reveal className="lp-title lp-title--light">
             <span className="eyebrow">The craft</span>
@@ -203,8 +205,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Reviews ================= */}
-      <section className="section bg-photo bg-photo--cream" style={{ '--img': 'url(/images/sundae.jpg)' }}>
+      <section className="section bg-photo bg-photo--cream" style={{ '--img': bgImage(images.sundae) }}>
         <div className="container">
           <Reveal className="lp-title">
             <span className="eyebrow">Kind words</span>
@@ -213,11 +214,11 @@ export default function Home() {
           </Reveal>
           <div className="reviews">
             {REVIEWS.map((r, i) => (
-              <Reveal className="review" key={r.name} delay={i * 100}>
+              <Reveal as="article" className="review" key={r.name} delay={i * 100}>
                 <div className="review__stars" aria-label="5 out of 5 stars">★★★★★</div>
                 <blockquote>“{r.quote}”</blockquote>
                 <div className="review__who">
-                  <span className="review__avatar">{r.name[0]}</span>
+                  <span className="review__avatar" aria-hidden="true">{r.name[0]}</span>
                   <div>{r.name}<span>{r.where}</span></div>
                 </div>
               </Reveal>
@@ -226,10 +227,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= Join ================= */}
       <section className="section" id="join">
         <div className="container">
-          <Reveal className="cta bg-photo" style={{ '--img': 'url(/images/parfait.jpg)' }}>
+          <Reveal className="cta bg-photo" style={{ '--img': bgImage(images.parfait) }}>
             <div>
               <span className="eyebrow">Join the club</span>
               <h2>Your first stamp is <em className="accent">on us</em></h2>
@@ -237,14 +237,27 @@ export default function Home() {
             </div>
             <div>
               {joined ? (
-                <p className="form-note form-note--ok">Welcome to the Mango Rewards Club! Check your inbox to finish enrolling. 🥭</p>
+                <p className="form-note form-note--ok" role="status">Welcome to the Mango Rewards Club! Check your inbox to finish enrolling.</p>
               ) : (
                 <form className="newsletter" onSubmit={join} noValidate>
-                  <input type="email" placeholder="Your email address" aria-label="Email address" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <input
+                    type="email"
+                    id="newsletter-email"
+                    placeholder="Your email address"
+                    aria-label="Email address"
+                    aria-invalid={emailError ? 'true' : 'false'}
+                    aria-describedby={emailError ? 'newsletter-error' : undefined}
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (emailError) setEmailError('');
+                    }}
+                  />
                   <button className="btn btn--primary" type="submit">Enrol</button>
                 </form>
               )}
-              {emailError && <p className="form-note" style={{ color: '#c2553f' }}>{emailError}</p>}
+              {emailError && <p className="form-note form-note--error" id="newsletter-error" role="alert">{emailError}</p>}
             </div>
           </Reveal>
         </div>

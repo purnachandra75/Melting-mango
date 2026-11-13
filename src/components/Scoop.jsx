@@ -135,8 +135,12 @@ export default function Scoop({ scoops = ['#F6C945'], vessel = 'waffle', topping
     );
   });
 
+  const a11y = title
+    ? { role: 'img', 'aria-label': title }
+    : { 'aria-hidden': true, role: 'presentation' };
+
   return (
-    <svg width={size} height={size * 1.3} viewBox="0 0 200 260" role="img" aria-label={title ?? 'Ice cream illustration'}>
+    <svg width={size} height={size * 1.3} viewBox="0 0 200 260" {...a11y}>
       <defs>
         <pattern id={`waffle-${uid}`} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
           <rect width="14" height="14" fill="#E3C58E" />

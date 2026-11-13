@@ -48,13 +48,26 @@ export default function ScoopBuilder() {
           {Array.from({ length: count }, (_, i) => (
             <div className="slot" key={i}>
               <span className="slot__label">Scoop {NUMERALS[i]}</span>
-              <div className="swatches" role="radiogroup" aria-label={`Flavour for scoop ${i + 1}`}>
+              <div
+                className="swatches"
+                role="radiogroup"
+                aria-label={`Flavour for scoop ${i + 1}`}
+                onKeyDown={(e) => {
+                  if (!['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(e.key)) return;
+                  e.preventDefault();
+                  const ids = flavors.map((f) => f.id);
+                  const cur = ids.indexOf(slots[i]);
+                  const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1;
+                  setSlot(i, ids[(cur + dir + ids.length) % ids.length]);
+                }}
+              >
                 {flavors.map((f) => (
                   <button
                     key={f.id}
                     type="button"
                     role="radio"
                     aria-checked={slots[i] === f.id}
+                    tabIndex={slots[i] === f.id ? 0 : -1}
                     className={`swatch ${slots[i] === f.id ? 'active' : ''}`}
                     onClick={() => setSlot(i, f.id)}
                     title={`${f.name} · ${formatPrice(f.price)}`}
@@ -85,7 +98,7 @@ export default function ScoopBuilder() {
             <span className="label">Your creation</span>
             <strong>{formatPrice(price)}</strong>
           </div>
-          <button className="btn btn--primary" onClick={() => addItem({ flavorIds: chosen.map((f) => f.id), containerId })}>
+          <button type="button" className="btn btn--primary" onClick={() => addItem({ flavorIds: chosen.map((f) => f.id), containerId })}>
             Add to bag
           </button>
         </div>

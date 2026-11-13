@@ -52,7 +52,8 @@
   transition: background 0.3s;
   color: inherit;
 }
-.menu-row:hover, .menu-row:focus-visible { background: var(--cream); outline: none; }
+.menu-row:hover { background: var(--cream); }
+.menu-row:focus-visible { background: var(--cream); }
 .menu-row__icon { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--fog); transition: transform 0.5s var(--ease), background 0.3s; }
 .menu-row__icon svg { width: 34px; height: auto; }
 .menu-row:hover .menu-row__icon { transform: translateY(-4px) rotate(-8deg); background: var(--butter); }
@@ -161,7 +162,7 @@
 .reward::before { content: ''; position: absolute; inset: 8px; border: 1px solid var(--mist); pointer-events: none; }
 .reward:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
 .reward--featured { background: var(--ink); color: var(--cream); border-color: var(--ink); }
-.reward--featured::before { border-color: #4a4a50; }
+.reward--featured::before { border-color: var(--ink-line-2); }
 .reward__ribbon {
   position: absolute;
   top: 22px;
@@ -184,12 +185,12 @@
 .reward__sub { font-size: 0.78rem; letter-spacing: 0.06em; color: var(--stone); }
 .reward__highlight { font-weight: 700; font-size: 0.95rem; margin: 6px 0 22px; }
 .reward__rules { margin: auto 0 0; width: 100%; text-align: left; border-top: 1px solid var(--mist); }
-.reward--featured .reward__rules { border-color: #4a4a50; }
+.reward--featured .reward__rules { border-color: var(--ink-line-2); }
 .reward__rules > div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--mist); font-size: 0.84rem; }
-.reward--featured .reward__rules > div { border-color: #4a4a50; }
+.reward--featured .reward__rules > div { border-color: var(--ink-line-2); }
 .reward__rules dt { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone); padding-top: 2px; }
 .reward__rules dd { margin: 0; color: var(--slate); }
-.reward--featured .reward__rules dd { color: #c9c9cf; }
+.reward--featured .reward__rules dd { color: var(--stone); }
 
 .stamps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; width: 100%; max-width: 280px; }
 .stamp {
@@ -201,7 +202,7 @@
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1rem;
-  color: #fff;
+  color: var(--white);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
   background: var(--c);
   box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.1);
@@ -308,7 +309,7 @@
   z-index: -1;
   background:
     linear-gradient(rgba(255, 251, 234, 0.78), rgba(255, 251, 234, 0.92)),
-    var(--head-img, url(/images/mango-scoops.jpg)) center / cover no-repeat;
+    var(--head-img, url(/images/mango-scoops.webp)) center / cover no-repeat;
 }
 .page-head + .section { padding-top: 70px !important; }
 
@@ -319,7 +320,7 @@
 .footer {
   background:
     linear-gradient(rgba(36, 36, 39, 0.93), rgba(36, 36, 39, 0.96)),
-    url(/images/chocolate-cones.jpg) center / cover no-repeat;
+    url(/images/chocolate-cones.webp) center / cover no-repeat;
 }
 
 @media (max-width: 1000px) {

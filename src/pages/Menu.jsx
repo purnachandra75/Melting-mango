@@ -4,10 +4,16 @@ import FlavorCard from '../components/FlavorCard';
 import FlavorModal from '../components/FlavorModal';
 import Reveal from '../components/Reveal';
 import { AVAILABILITY, CONTAINERS, SCOOP_SIZES, flavors } from '../data/flavors';
+import { bgImage, images } from '../data/images';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 const listOr = (words) => `${words.slice(0, -1).join(', ')} or ${words[words.length - 1]}`;
 
 export default function Menu() {
+  usePageTitle(
+    'Flavours',
+    "Browse Melting Mango’s small-batch flavours — Mango, Chocolate, Pista, Chickoo and Banana Split. Order scoops in a waffle cone, cup or sugar cone."
+  );
   const [params, setParams] = useSearchParams();
   const active = AVAILABILITY.includes(params.get('a')) ? params.get('a') : 'All';
   const [query, setQuery] = useState('');
@@ -27,7 +33,7 @@ export default function Menu() {
 
   return (
     <>
-      <header className="page-head container">
+      <header className="page-head container" style={{ '--head-img': bgImage(images.mangoScoops) }}>
         <span className="eyebrow">The menu</span>
         <h1>Today’s <em className="accent">flavours</em></h1>
         <p>
@@ -36,12 +42,18 @@ export default function Menu() {
         </p>
       </header>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="section" style={{ paddingTop: 0 }} aria-label="Flavour list">
         <div className="container">
           <div className="menu-tools">
-            <div className="chips" role="tablist" aria-label="Filter by availability">
+            <div className="chips" role="group" aria-label="Filter by availability">
               {AVAILABILITY.map((a) => (
-                <button key={a} role="tab" aria-selected={a === active} className={`chip ${a === active ? 'active' : ''}`} onClick={() => setFilter(a)}>
+                <button
+                  key={a}
+                  type="button"
+                  aria-pressed={a === active}
+                  className={`chip ${a === active ? 'active' : ''}`}
+                  onClick={() => setFilter(a)}
+                >
                   {a}
                 </button>
               ))}
@@ -64,8 +76,8 @@ export default function Menu() {
               ))}
             </div>
           ) : (
-            <div className="empty">
-              <h3>No scoops found</h3>
+            <div className="empty" role="status">
+              <h2>No scoops found</h2>
               <p>Try a different search or filter.</p>
             </div>
           )}

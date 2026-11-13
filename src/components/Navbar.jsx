@@ -28,25 +28,38 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => e.key === 'Escape' && setMenuOpen(false);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const navLink = (l, extra) =>
+    l.hash ? (
+      <Link to={l.to} onClick={closeMenu} {...extra}>{l.label}</Link>
+    ) : (
+      <NavLink to={l.to} end={l.end} onClick={closeMenu} {...extra}>
+        {l.label}
+      </NavLink>
+    );
 
   return (
     <>
-      <header className={`nav ${scrolled || menuOpen ? 'nav--scrolled' : ''}`} style={{ zIndex: 60 }}>
+      <header className={`nav ${scrolled || menuOpen ? 'nav--scrolled' : ''}`}>
         <div className="container nav__inner">
-          <Logo />
+          <Logo onClick={closeMenu} />
           <nav aria-label="Primary">
             <ul className="nav__links">
               {LINKS.map((l) => (
-                <li key={l.to}>
-                  {l.hash ? (
-                    <Link to={l.to}>{l.label}</Link>
-                  ) : (
-                    <NavLink to={l.to} end={l.end}>
-                      {l.label}
-                    </NavLink>
-                  )}
-                </li>
+                <li key={l.to}>{navLink(l)}</li>
               ))}
             </ul>
           </nav>
@@ -54,14 +67,21 @@ export default function Navbar() {
             <Link to="/menu" className="btn btn--primary">
               Order now
             </Link>
-            <button className="cart-btn" onClick={open} aria-label={`Open bag, ${count} items`}>
+            <button type="button" className="cart-btn" onClick={open} aria-label={`Open bag, ${count} ${count === 1 ? 'item' : 'items'}`}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                 <path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" />
                 <path d="M9 8V6a3 3 0 0 1 6 0v2" />
               </svg>
-              {count > 0 && <span className="cart-btn__count">{count}</span>}
+              {count > 0 && <span className="cart-btn__count" aria-hidden="true">{count}</span>}
             </button>
-            <button className="nav__toggle" onClick={() => setMenuOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={menuOpen}>
+            <button
+              type="button"
+              className="nav__toggle"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
                 {menuOpen ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 8h16M4 16h16" />}
               </svg>
@@ -70,20 +90,12 @@ export default function Navbar() {
         </div>
       </header>
 
-      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-        {LINKS.map((l) =>
-          l.hash ? (
-            <Link key={l.to} to={l.to}>{l.label}</Link>
-          ) : (
-            <NavLink key={l.to} to={l.to} end={l.end}>
-              {l.label}
-            </NavLink>
-          )
-        )}
-        <Link to="/menu" className="btn btn--primary" style={{ marginTop: 24, fontFamily: 'var(--font-body)', fontSize: '1rem' }}>
+      <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Mobile" hidden={!menuOpen}>
+        {LINKS.map((l) => navLink(l, { key: l.to }))}
+        <Link to="/menu" className="btn btn--primary mobile-menu__cta" onClick={closeMenu}>
           Order now
         </Link>
-      </div>
+      </nav>
     </>
   );
 }

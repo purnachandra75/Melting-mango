@@ -89,8 +89,8 @@ export default function Preloader() {
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const showMs = reduce ? 500 : 3400;
-    const hideMs = reduce ? 250 : 800;
+    const showMs = reduce ? 400 : 2000;
+    const hideMs = reduce ? 200 : 600;
 
     const t1 = window.setTimeout(() => setDone(true), showMs);
     const t2 = window.setTimeout(() => setGone(true), showMs + hideMs);
@@ -190,9 +190,9 @@ export default function Preloader() {
         </div>
 
         <div className="pl-brand">
-          <h1>
+          <p className="pl-brand__name">
             Melting <em>Mango</em>
-          </h1>
+          </p>
           <div className="pl-rule" aria-hidden="true" />
           <p>Slow-churned. Sun-ripened.</p>
         </div>

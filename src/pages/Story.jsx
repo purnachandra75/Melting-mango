@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import Scoop from '../components/Scoop';
 import Reveal from '../components/Reveal';
+import { bgImage, images } from '../data/images';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 const TIMELINE = [
   { year: '2016', title: 'A cart in Jubilee Hills', text: 'One hand-crank churn, three flavours and a queue that went around the block.' },
@@ -16,9 +18,14 @@ const VALUES = [
 ];
 
 export default function Story() {
+  usePageTitle(
+    'Our Story',
+    'How Melting Mango grew from a grandmother’s kitchen in Jubilee Hills to artisan parlours in Hyderabad, Bengaluru and Mumbai.'
+  );
+
   return (
     <>
-      <header className="page-head container" style={{ '--head-img': 'url(/images/cones-flatlay.jpg)' }}>
+      <header className="page-head container" style={{ '--head-img': bgImage(images.conesFlatlay) }}>
         <span className="eyebrow">Our story</span>
         <h1>It started with <em className="accent">one mango</em></h1>
         <p>A family recipe, a borrowed churn and a stubborn belief that ice cream should taste of what it’s made from.</p>
@@ -27,7 +34,7 @@ export default function Story() {
       <section className="section" style={{ paddingTop: 20 }}>
         <div className="container split">
           <Reveal className="story-art">
-            <Scoop scoops={['#F6B93B', '#F9D56E']} vessel="cone" topping="leaf" size={260} />
+            <Scoop scoops={['#F6B93B', '#F9D56E']} vessel="cone" topping="leaf" size={260} title="A two-scoop mango cone" />
           </Reveal>
           <Reveal delay={120}>
             <span className="eyebrow">The beginning</span>
@@ -53,15 +60,15 @@ export default function Story() {
               <h2>A decade of <em className="accent">scoops</em></h2>
             </div>
           </Reveal>
-          <div className="timeline">
+          <ol className="timeline">
             {TIMELINE.map((t, i) => (
-              <Reveal className="timeline__item" key={t.year} delay={i * 100}>
+              <Reveal as="li" className="timeline__item" key={t.year} delay={i * 100}>
                 <div className="timeline__year">{t.year}</div>
-                <h4>{t.title}</h4>
+                <h3>{t.title}</h3>
                 <p>{t.text}</p>
               </Reveal>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
@@ -75,7 +82,7 @@ export default function Story() {
           </Reveal>
           <div className="values">
             {VALUES.map((v, i) => (
-              <Reveal className="value" key={v.title} delay={i * 100}>
+              <Reveal as="article" className="value" key={v.title} delay={i * 100}>
                 <div className="value__icon" aria-hidden="true">{v.icon}</div>
                 <h3>{v.title}</h3>
                 <p>{v.text}</p>
