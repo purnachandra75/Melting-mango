@@ -8,7 +8,7 @@
 
 /* ---------- Shared classic title block ---------- */
 .lp-title { text-align: center; margin: 0 auto 64px; max-width: 820px; display: grid; justify-items: center; gap: 14px; }
-.lp-title h2 { font-size: clamp(2.6rem, 5.5vw, 4.2rem); }
+.lp-title h2 { font-size: clamp(2.05rem, 4vw, 3.05rem); font-weight: 800; letter-spacing: -0.035em; }
 .lp-title p { color: var(--slate); }
 .lp-title .eyebrow::after { content: ''; width: 28px; height: 1px; background: currentColor; }
 .lp-title--light h2 { color: var(--cream); }
@@ -21,7 +21,7 @@
 .drip { transform-box: fill-box; transform-origin: top; animation: drip 5s ease-in-out infinite alternate; }
 
 /* ---------- Menu board ---------- */
-.lp-containers { padding-top: 150px; }
+.lp-containers { padding-top: var(--section-pad); }
 .lp-menu--after { padding-top: 110px; }
 .menu-board { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 72px; align-items: center; }
 .menu-board__list {
@@ -59,9 +59,9 @@
 .menu-row:hover .menu-row__icon { transform: translateY(-4px) rotate(-8deg); background: var(--butter); }
 .menu-row__text { display: grid; gap: 2px; min-width: 0; }
 .menu-row__line { display: flex; align-items: baseline; gap: 10px; }
-.menu-row__name { font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.menu-row__name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .menu-row__dots { flex: 1; border-bottom: 2px dotted var(--line); transform: translateY(-6px); min-width: 20px; }
-.menu-row__price { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--mango-deep); }
+.menu-row__price { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--mango); }
 .menu-row__notes { font-size: 0.84rem; color: var(--stone); }
 .badge-seasonal {
   font-family: var(--font-body);
@@ -70,13 +70,13 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   background: var(--mango);
-  color: var(--ink);
+  color: var(--white);
   padding: 3px 9px;
   border-radius: 999px;
 }
 .menu-board__meta { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--mist); }
 .menu-board__meta h4 { font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); margin-bottom: 6px; }
-.menu-board__meta p { font-family: var(--font-display); font-size: 1.3rem; font-style: italic; }
+.menu-board__meta p { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; font-style: normal; }
 .menu-board__fine { margin-top: 18px; font-size: 0.78rem; color: var(--stone); }
 
 .frame { margin: 0; position: relative; padding: 14px; background: var(--white); box-shadow: var(--shadow); transform: rotate(1.5deg); transition: transform 0.6s var(--ease); }
@@ -169,7 +169,7 @@
   right: -42px;
   transform: rotate(45deg);
   background: var(--mango);
-  color: var(--ink);
+  color: var(--white);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.14em;

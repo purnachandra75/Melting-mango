@@ -33,6 +33,8 @@ export const flavors = [
     topping: 'mango',
     vessel: 'waffle',
     tint: '#FFF3C4',
+    photo: '/images/mango-scoops.webp',
+    rating: 4.9,
   },
   {
     id: 'chocolate',
@@ -47,6 +49,8 @@ export const flavors = [
     topping: 'cherry',
     vessel: 'cup',
     tint: '#ECECEE',
+    photo: '/images/chocolate-cones.webp',
+    rating: 4.8,
   },
   {
     id: 'pista',
@@ -61,6 +65,8 @@ export const flavors = [
     topping: 'pistachio',
     vessel: 'sugar',
     tint: '#F6F6F7',
+    photo: '/images/waffle-bowl.webp',
+    rating: 4.8,
   },
   {
     id: 'chickoo',
@@ -75,6 +81,8 @@ export const flavors = [
     topping: 'leaf',
     vessel: 'waffle',
     tint: '#FFF6D6',
+    photo: '/images/cones-flatlay.webp',
+    rating: 4.9,
   },
   {
     id: 'banana-split',
@@ -89,6 +97,8 @@ export const flavors = [
     topping: 'cherry',
     vessel: 'cup',
     tint: '#F6F6F7',
+    photo: '/images/parfait.webp',
+    rating: 4.8,
   },
 ];
 
