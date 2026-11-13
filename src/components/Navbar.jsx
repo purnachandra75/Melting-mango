@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 
 const LINKS = [
   { to: '/', label: 'Home', end: true },
-  { to: '/menu', label: 'Flavours' },
+  { to: '/menu', label: 'Menu' },
   { to: '/#rewards', label: 'Rewards', hash: true },
   { to: '/story', label: 'Our Story' },
   { to: '/visit', label: 'Visit' },
@@ -64,6 +64,13 @@ export default function Navbar() {
             </ul>
           </nav>
           <div className="nav__actions">
+            <Link to="/visit" className="nav__pin">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" />
+                <circle cx="12" cy="10" r="2.3" />
+              </svg>
+              Jubilee Hills, Hyderabad
+            </Link>
             <Link to="/menu" className="btn btn--ink">
               Order now
             </Link>
@@ -92,6 +99,9 @@ export default function Navbar() {
 
       <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Mobile" hidden={!menuOpen}>
         {LINKS.map((l) => navLink(l, { key: l.to }))}
+        <Link to="/visit" className="nav__pin nav__pin--mobile" onClick={closeMenu}>
+          Jubilee Hills, Hyderabad
+        </Link>
         <Link to="/menu" className="btn btn--ink mobile-menu__cta" onClick={closeMenu}>
           Order now
         </Link>

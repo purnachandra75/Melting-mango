@@ -1,213 +1,201 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FlavorModal from '../components/FlavorModal';
-import Reveal from '../components/Reveal';
 import Hero from '../components/landing/Hero';
-import { flavors } from '../data/flavors';
+import Reveal from '../components/Reveal';
 import { images } from '../data/images';
+import { REWARDS } from '../data/flavors';
+import { FLAGSHIP, HOURS, LOCATIONS } from '../data/locations';
 import { usePageTitle } from '../hooks/usePageTitle';
 
-const WHY = [
-  {
-    title: 'Real fruit',
-    text: 'Hand-pulped Alphonso mangoes and seasonal fruit, never from a tin.',
-    icon: 'fruit',
-  },
-  {
-    title: 'Slow-churned',
-    text: 'Small batches every morning for a denser, creamier scoop.',
-    icon: 'churn',
-  },
-  {
-    title: 'Nothing artificial',
-    text: 'No artificial colours or flavours — just ripe fruit and fresh cream.',
-    icon: 'leaf',
-  },
-  {
-    title: 'Three parlours',
-    text: 'Visit us in Hyderabad, Bengaluru and Mumbai, seven days a week.',
-    icon: 'pin',
-  },
+const SPECIALS = [
+  { name: 'Ice Cream Scoops', src: images.mangoScoops, alt: 'Scoops of mango ice cream' },
+  { name: 'Sundaes', src: images.sundae, alt: 'An ice cream sundae' },
+  { name: 'Waffle Cones', src: images.chocolateCones, alt: 'Chocolate ice cream in waffle cones' },
+  { name: 'Parfaits', src: images.parfait, alt: 'A chocolate parfait in a glass' },
+  { name: 'Popsicles', src: images.popsicles, alt: 'Fruit popsicles' },
 ];
 
-function WhyIcon({ name }) {
-  const props = {
-    width: 26,
-    height: 26,
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.7,
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round',
-    'aria-hidden': true,
-  };
-  if (name === 'fruit') {
-    return (
-      <svg {...props}>
-        <path d="M12 21c5 0 8-4.2 8-9.2C20 6.5 16.5 3 12 3S4 6.5 4 11.8C4 16.8 7 21 12 21Z" />
-        <path d="M12 3c1.2-1.8 3.4-2 4.6-1" />
-        <path d="M12 8v13" />
-      </svg>
-    );
-  }
-  if (name === 'churn') {
-    return (
-      <svg {...props}>
-        <path d="M8 3h8" />
-        <path d="M12 3v6" />
-        <path d="M7 9h10l-1.2 10.2A2 2 0 0 1 13.8 21h-3.6a2 2 0 0 1-2-1.8L7 9Z" />
-        <path d="M9.5 13h5" />
-      </svg>
-    );
-  }
-  if (name === 'leaf') {
-    return (
-      <svg {...props}>
-        <path d="M5 19c8-1 13-8 14-15-8 1-14 7-14 15Z" />
-        <path d="M5 19c2-4 6-8 12-10" />
-      </svg>
-    );
-  }
-  return (
-    <svg {...props}>
-      <path d="M12 21s7-5.6 7-11.2A7 7 0 0 0 5 9.8C5 15.4 12 21 12 21Z" />
-      <circle cx="12" cy="9.5" r="2.2" />
-    </svg>
-  );
+const REVIEWS = [
+  { quote: 'The Mango tastes like biting into the fruit on a summer afternoon. Nothing else comes close.', name: 'Ananya R.', where: 'Regular since day one' },
+  { quote: 'Three scoops in a waffle cone — Pista, Chickoo and Chocolate. Pure, old-fashioned happiness.', name: 'Karthik S.', where: 'Flavor Passport member' },
+  { quote: 'An elegant little parlour with gracious staff. The Banana Split scoop is worth the trip alone.', name: 'Meher D.', where: 'Mango Points member' },
+];
+
+const PASSPORT = REWARDS.find((r) => r.id === 'flavor-passport');
+
+function initials(name) {
+  return name
+    .split(' ')
+    .filter((p) => !p.endsWith('.'))
+    .map((p) => p[0])
+    .join('')
+    .slice(0, 2);
 }
 
 export default function Home() {
-  usePageTitle();
-  const [selected, setSelected] = useState(null);
-  const closeModal = useCallback(() => setSelected(null), []);
+  usePageTitle(
+    'Artisan Ice Cream',
+    'Melting Mango — small-batch, slow-churned artisan ice cream made every morning with ripe fruit, real cream and nothing artificial. Parlours in Hyderabad, Bengaluru and Mumbai.'
+  );
+
+  const [review, setReview] = useState(0);
+  const current = REVIEWS[review];
+  const prev = () => setReview((i) => (i === 0 ? REVIEWS.length - 1 : i - 1));
+  const next = () => setReview((i) => (i === REVIEWS.length - 1 ? 0 : i + 1));
 
   return (
     <>
       <Hero />
 
-      <section className="section lp-scoops" id="menu">
+      <section className="lp-specials section" aria-labelledby="specials-title">
         <div className="container">
-          <div className="lp-rowhead">
-            <h2>Our <em className="accent">flavours</em></h2>
-            <Link to="/menu" className="lp-rowhead__link">
-              View all flavours
-              <span aria-hidden="true"> →</span>
-            </Link>
-          </div>
-          <ul className="scoop-row">
-            {flavors.map((f) => (
-              <li key={f.id}>
-                <button
-                  type="button"
-                  className="scoop-row__item"
-                  onClick={() => setSelected(f)}
-                  aria-label={`View ${f.name}`}
-                >
-                  <span className="scoop-row__photo">
-                    <img src={f.scoop} alt="" width="440" height="440" loading="lazy" decoding="async" />
-                  </span>
-                  <span className="scoop-row__name">{f.name}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="section lp-promos">
-        <div className="container lp-promos__grid">
-          <article className="promo" id="rewards">
-            <div className="promo__copy">
-              <p className="promo__label">Mango Rewards</p>
-              <h2>More scoops, more smiles</h2>
-              <p>
-                Collect six stamps on your Flavor Passport and earn a free scoop. Enrol once at the counter or online, and we’ll keep track.
-              </p>
-              <Link to="/visit" className="btn btn--ink">Enrol at a parlour</Link>
-            </div>
-            <div className="promo__media">
-              <img
-                src={images.waffleBowl}
-                alt="A waffle cone with two scoops of ice cream"
-                width="800"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </article>
-
-          <article className="promo promo--alt">
-            <div className="promo__copy">
-              <p className="promo__label">Made to order</p>
-              <h2>Build your perfect scoop</h2>
-              <p>
-                Mix any of our flavours, in one, two or three scoops, served in a waffle cone, cup or sugar cone.
-              </p>
-              <Link to="/menu" className="btn btn--ink">Explore the menu</Link>
-            </div>
-            <div className="promo__media">
-              <img
-                src={images.parfait}
-                alt="A chocolate parfait in a glass"
-                width="800"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="section lp-why">
-        <div className="container">
-          <Reveal className="lp-title">
-            <p className="mm-hero__label">The creamery</p>
-            <h2>Why <em className="accent">Melting Mango</em>?</h2>
+          <Reveal className="lp-heading">
+            <h2 id="specials-title" className="lp-title">Our Specialities</h2>
+            <p>Scoops, sundaes, cones and more — made fresh in our parlours every day.</p>
           </Reveal>
-          <ul className="why-grid">
-            {WHY.map((w, i) => (
-              <Reveal as="li" className="why-card" key={w.title} delay={i * 70}>
-                <span className="why-card__icon" aria-hidden="true">
-                  <WhyIcon name={w.icon} />
-                </span>
-                <h3>{w.title}</h3>
-                <p>{w.text}</p>
+          <ul className="lp-specials__grid">
+            {SPECIALS.map((s, i) => (
+              <Reveal as="li" key={s.name} delay={i * 60}>
+                <Link to="/menu" className="lp-special">
+                  <span className="lp-special__media">
+                    <img src={s.src} alt={s.alt} />
+                  </span>
+                  <span className="lp-special__name">{s.name}</span>
+                </Link>
               </Reveal>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="section lp-story">
-        <div className="container lp-story__grid">
-          <Reveal className="lp-story__photo">
-            <img
-              src={images.conesFlatlay}
-              alt="Ice cream cones with berries and flowers, photographed from above"
-              width="1600"
-              height="1067"
-              loading="lazy"
-              decoding="async"
-            />
+      <section className="lp-about-row section" aria-label="About and rewards">
+        <div className="container lp-about-row__grid">
+          <Reveal as="article" className="lp-about">
+            <div className="lp-about__photo">
+              <img
+                src={images.parlourInterior}
+                alt="Sunlit cafe seating with a counter — a warm parlour interior"
+                width="1800"
+                height="1234"
+              />
+            </div>
+            <div className="lp-about__copy">
+              <h2 className="lp-title">About Our Parlour</h2>
+              <p>
+                Every summer, our founder’s grandmother would turn the season’s best Alphonsos into a
+                hand-churned ice cream so smooth it disappeared before it could melt. Melting Mango began
+                as an attempt to bottle that feeling.
+              </p>
+              <p>
+                Ten years on we still churn in small batches, still hand-pulp every mango, and still taste
+                every tray before the doors open.
+              </p>
+              <Link to="/story" className="btn btn--ink">
+                Know More <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </Reveal>
-          <Reveal className="lp-story__copy" delay={100}>
-            <p className="mm-hero__label">Our story</p>
-            <h2>It started with <em className="accent">one mango</em></h2>
-            <p>
-              Every summer, our founder’s grandmother would turn the season’s best Alphonsos into a hand-churned ice cream so smooth it disappeared before it could melt. Melting Mango began as an attempt to bottle that feeling.
-            </p>
-            <p>
-              Ten years on we still churn in small batches, still hand-pulp every mango, and still taste every tray before the doors open.
-            </p>
-            <Link to="/story" className="btn btn--ghost">Read our story</Link>
+
+          <Reveal as="article" className="lp-offer" id="rewards" delay={120}>
+            <div className="lp-offer__copy">
+              <p className="lp-offer__label">Mango Rewards</p>
+              <h2>{PASSPORT.name}</h2>
+              <p className="lp-offer__highlight">{PASSPORT.highlight}</p>
+              <p>
+                Taste your way around the menu. Enrol once at the counter or online, and we’ll keep track.
+              </p>
+              <Link to="/visit" className="btn btn--ink">
+                Enrol at a parlour
+              </Link>
+            </div>
+            <div className="lp-offer__media">
+              <img
+                src={images.waffleBowl}
+                alt="A waffle bowl filled with scoops of ice cream"
+                width="800"
+                height="800"
+              />
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {selected && <FlavorModal flavor={selected} onClose={closeModal} />}
+      <section className="lp-bottom section" aria-label="Reviews and visit">
+        <div className="container lp-bottom__grid">
+          <Reveal as="article" className="lp-reviews" aria-labelledby="reviews-title">
+            <h2 id="reviews-title" className="lp-title">What Our Customers Say</h2>
+            <div className="lp-reviews__card">
+              <button type="button" className="lp-reviews__nav" onClick={prev} aria-label="Previous review">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M15 5 8 12l7 7" />
+                </svg>
+              </button>
+              <blockquote>
+                <span className="lp-reviews__avatar" aria-hidden="true">{initials(current.name)}</span>
+                <p>“{current.quote}”</p>
+                <footer>
+                  <cite>{current.name}</cite>
+                  <span>{current.where}</span>
+                </footer>
+              </blockquote>
+              <button type="button" className="lp-reviews__nav" onClick={next} aria-label="Next review">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="m9 5 7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            <div className="lp-reviews__dots" role="tablist" aria-label="Reviews">
+              {REVIEWS.map((r, i) => (
+                <button
+                  key={r.name}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === review}
+                  aria-label={`Review by ${r.name}`}
+                  className={i === review ? 'is-active' : ''}
+                  onClick={() => setReview(i)}
+                />
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal as="article" className="lp-visit" delay={100} aria-labelledby="visit-title">
+            <div className="lp-visit__copy">
+              <h2 id="visit-title" className="lp-title">Visit Our Parlour</h2>
+              <p className="lp-visit__row">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+                  <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" />
+                  <circle cx="12" cy="10" r="2.3" />
+                </svg>
+                <span>
+                  {FLAGSHIP.name}, {FLAGSHIP.city}
+                  <small>{FLAGSHIP.address}</small>
+                </span>
+              </p>
+              <p className="lp-visit__row">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8.5" />
+                  <path d="M12 8v5l3 2" />
+                </svg>
+                <span>
+                  Mon – Thu <strong>{HOURS.weekday.label}</strong>
+                  <small>Fri – Sun {HOURS.weekend.label}</small>
+                </span>
+              </p>
+              <p className="lp-visit__fine">Also in {LOCATIONS.slice(1).map((l) => `${l.name}, ${l.city}`).join(' and ')}.</p>
+              <Link to="/visit" className="btn btn--ghost">Find a parlour</Link>
+            </div>
+            <div className="lp-visit__photo">
+              <img
+                src={images.parlourDisplay}
+                alt="A gelato display case with tubs of ice cream behind the parlour window"
+                width="1150"
+                height="650"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </>
   );
 }
