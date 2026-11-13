@@ -1,234 +1,209 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import FlavorCard from '../components/FlavorCard';
 import FlavorModal from '../components/FlavorModal';
 import Reveal from '../components/Reveal';
-import { Ornament } from '../components/landing/Decor';
 import Hero from '../components/landing/Hero';
-import ContainerCards from '../components/landing/ContainerCards';
-import Gallery from '../components/landing/Gallery';
-import ScoopBuilder from '../components/landing/ScoopBuilder';
-import Rewards from '../components/landing/Rewards';
 import { flavors } from '../data/flavors';
-import { bgImage, images } from '../data/images';
+import { images } from '../data/images';
 import { usePageTitle } from '../hooks/usePageTitle';
 
-const CRAFT = [
-  { title: 'Sourced', text: 'Fruit bought ripe from growers we know by name — mango, chickoo and banana at their seasonal best.' },
-  { title: 'Steeped', text: 'Bases rest overnight so cacao, pistachio and cream fully bloom before a single churn.' },
-  { title: 'Slow-churned', text: 'Churned at low speed in small batches for less air, a denser texture and a cleaner finish.' },
+const WHY = [
+  {
+    title: 'Real fruit',
+    text: 'Hand-pulped Alphonso mangoes and seasonal fruit, never from a tin.',
+    icon: 'fruit',
+  },
+  {
+    title: 'Slow-churned',
+    text: 'Small batches every morning for a denser, creamier scoop.',
+    icon: 'churn',
+  },
+  {
+    title: 'Nothing artificial',
+    text: 'No artificial colours or flavours — just ripe fruit and fresh cream.',
+    icon: 'leaf',
+  },
+  {
+    title: 'Three parlours',
+    text: 'Visit us in Hyderabad, Bengaluru and Mumbai, seven days a week.',
+    icon: 'pin',
+  },
 ];
 
-const REVIEWS = [
-  { quote: 'The Mango tastes like biting into the fruit on a summer afternoon. Nothing else comes close.', name: 'Ananya R.', where: 'Regular since day one' },
-  { quote: 'Three scoops in a waffle cone — Pista, Chickoo and Chocolate. Pure, old-fashioned happiness.', name: 'Karthik S.', where: 'Flavor Passport member' },
-  { quote: 'An elegant little parlour with gracious staff. The Banana Split scoop is worth the trip alone.', name: 'Meher D.', where: 'Mango Points member' },
-];
-
-const STATS = [
-  { value: '4.9', label: 'Guest rating' },
-  { value: '5', label: 'Signature flavours' },
-  { value: '3', label: 'Parlours' },
-  { value: '2016', label: 'Churning since' },
-];
+function WhyIcon({ name }) {
+  const props = {
+    width: 26,
+    height: 26,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.7,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    'aria-hidden': true,
+  };
+  if (name === 'fruit') {
+    return (
+      <svg {...props}>
+        <path d="M12 21c5 0 8-4.2 8-9.2C20 6.5 16.5 3 12 3S4 6.5 4 11.8C4 16.8 7 21 12 21Z" />
+        <path d="M12 3c1.2-1.8 3.4-2 4.6-1" />
+        <path d="M12 8v13" />
+      </svg>
+    );
+  }
+  if (name === 'churn') {
+    return (
+      <svg {...props}>
+        <path d="M8 3h8" />
+        <path d="M12 3v6" />
+        <path d="M7 9h10l-1.2 10.2A2 2 0 0 1 13.8 21h-3.6a2 2 0 0 1-2-1.8L7 9Z" />
+        <path d="M9.5 13h5" />
+      </svg>
+    );
+  }
+  if (name === 'leaf') {
+    return (
+      <svg {...props}>
+        <path d="M5 19c8-1 13-8 14-15-8 1-14 7-14 15Z" />
+        <path d="M5 19c2-4 6-8 12-10" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...props}>
+      <path d="M12 21s7-5.6 7-11.2A7 7 0 0 0 5 9.8C5 15.4 12 21 12 21Z" />
+      <circle cx="12" cy="9.5" r="2.2" />
+    </svg>
+  );
+}
 
 export default function Home() {
   usePageTitle();
   const [selected, setSelected] = useState(null);
-  const [email, setEmail] = useState('');
-  const [joined, setJoined] = useState(false);
-  const [emailError, setEmailError] = useState('');
   const closeModal = useCallback(() => setSelected(null), []);
-
-  const join = (e) => {
-    e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError('Please enter a valid email address.');
-      return;
-    }
-    setEmailError('');
-    setJoined(true);
-    setEmail('');
-  };
 
   return (
     <>
       <Hero />
 
-      <section className="section lp-flavours" id="menu">
+      <section className="section lp-scoops" id="menu">
         <div className="container">
-          <Reveal className="lp-title">
-            <span className="eyebrow">The menu</span>
-            <h2>Popular <em className="accent">flavours</em></h2>
-            <p>Five slow-churned favourites, made fresh every morning.</p>
-          </Reveal>
-
-          <div className="flavor-grid">
-            {flavors.map((f, i) => (
-              <Reveal key={f.id} delay={(i % 5) * 70}>
-                <FlavorCard flavor={f} onSelect={setSelected} />
-              </Reveal>
+          <div className="lp-rowhead">
+            <h2>Our <em className="accent">flavours</em></h2>
+            <Link to="/menu" className="lp-rowhead__link">
+              View all flavours
+              <span aria-hidden="true"> →</span>
+            </Link>
+          </div>
+          <ul className="scoop-row">
+            {flavors.map((f) => (
+              <li key={f.id}>
+                <button
+                  type="button"
+                  className="scoop-row__item"
+                  onClick={() => setSelected(f)}
+                  aria-label={`View ${f.name}`}
+                >
+                  <span className="scoop-row__photo">
+                    <img src={f.scoop} alt="" width="440" height="440" loading="lazy" decoding="async" />
+                  </span>
+                  <span className="scoop-row__name">{f.name}</span>
+                </button>
+              </li>
             ))}
-          </div>
-
-          <p className="lp-flavours__fine">
-            Prices are per scoop. Seasonal flavours are available while the harvest lasts.
-          </p>
-          <div className="lp-flavours__more">
-            <Link to="/menu" className="btn btn--ghost">See the full menu</Link>
-          </div>
+          </ul>
         </div>
       </section>
 
-      <section className="section lp-craving" id="join">
-        <div className="container">
-          <Reveal className="cta cta--craving">
-            <div className="cta__copy">
-              <p className="cta__script">Made fresh every morning</p>
-              <h2>Craving something <em>sweet</em>?</h2>
+      <section className="section lp-promos">
+        <div className="container lp-promos__grid">
+          <article className="promo" id="rewards">
+            <div className="promo__copy">
+              <p className="promo__label">Mango Rewards</p>
+              <h2>More scoops, more smiles</h2>
               <p>
-                Enrol in Mango Rewards — your first stamp is on us — or visit a parlour for a freshly churned scoop.
+                Collect six stamps on your Flavor Passport and earn a free scoop. Enrol once at the counter or online, and we’ll keep track.
               </p>
-              <div className="cta__stats">
-                {STATS.map((s) => (
-                  <div className="cta__stat" key={s.label}>
-                    <strong>{s.value}</strong>
-                    <span>{s.label}</span>
-                  </div>
-                ))}
-              </div>
+              <Link to="/visit" className="btn btn--ink">Enrol at a parlour</Link>
             </div>
-            <div className="cta__form">
-              {joined ? (
-                <p className="form-note form-note--ok" role="status">
-                  Welcome to the Mango Rewards Club! Check your inbox to finish enrolling.
-                </p>
-              ) : (
-                <form className="newsletter" onSubmit={join} noValidate>
-                  <input
-                    type="email"
-                    id="newsletter-email"
-                    placeholder="Your email address"
-                    aria-label="Email address"
-                    aria-invalid={emailError ? 'true' : 'false'}
-                    aria-describedby={emailError ? 'newsletter-error' : undefined}
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (emailError) setEmailError('');
-                    }}
-                  />
-                  <button className="btn btn--primary" type="submit">Enrol</button>
-                </form>
-              )}
-              {emailError && (
-                <p className="form-note form-note--error" id="newsletter-error" role="alert">
-                  {emailError}
-                </p>
-              )}
+            <div className="promo__media">
+              <img
+                src={images.waffleBowl}
+                alt="A waffle cone with two scoops of ice cream"
+                width="800"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
-          </Reveal>
+          </article>
+
+          <article className="promo promo--alt">
+            <div className="promo__copy">
+              <p className="promo__label">Made to order</p>
+              <h2>Build your perfect scoop</h2>
+              <p>
+                Mix any of our flavours, in one, two or three scoops, served in a waffle cone, cup or sugar cone.
+              </p>
+              <Link to="/menu" className="btn btn--ink">Explore the menu</Link>
+            </div>
+            <div className="promo__media">
+              <img
+                src={images.parfait}
+                alt="A chocolate parfait in a glass"
+                width="800"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </article>
         </div>
       </section>
 
-      <section className="section lp-containers">
+      <section className="section lp-why">
         <div className="container">
           <Reveal className="lp-title">
-            <span className="eyebrow">Served your way</span>
-            <h2>Cone, cup or <em className="accent">sugar cone?</em></h2>
-            <p>Every flavour comes in one, two or three scoops — pick the way you love to eat it.</p>
+            <p className="mm-hero__label">The creamery</p>
+            <h2>Why <em className="accent">Melting Mango</em>?</h2>
           </Reveal>
-          <ContainerCards />
-        </div>
-      </section>
-
-      <section className="parallax" style={{ '--img': bgImage(images.chocolateCones) }}>
-        <div className="container parallax__inner">
-          <Reveal>
-            <Ornament light />
-            <blockquote>
-              “Every scoop begins at dawn — with ripe fruit, fresh cream and a great deal of patience.”
-            </blockquote>
-            <cite>The Melting Mango Creamery</cite>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section lp-builder bg-photo bg-photo--cream" id="builder" style={{ '--img': bgImage(images.sprinkleBowl) }}>
-        <div className="container">
-          <Reveal className="lp-title">
-            <span className="eyebrow">Made to order</span>
-            <h2>Build your <em className="accent">perfect scoop</em></h2>
-            <p>Choose one, two or three scoops, mix any flavours you like, and pick your container.</p>
-          </Reveal>
-          <Reveal>
-            <ScoopBuilder />
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section lp-rewards bg-photo bg-photo--gray" id="rewards" style={{ '--img': bgImage(images.popsicles) }}>
-        <div className="container">
-          <Reveal className="lp-title">
-            <span className="eyebrow">Mango Rewards Club</span>
-            <h2>Rewards worth <em className="accent">savouring</em></h2>
-            <p>Three ways to earn a free scoop. Enrol once at the counter or online, and we’ll keep track for you.</p>
-          </Reveal>
-          <Rewards />
-          <p className="rewards__fine">
-            <span>✦</span> Only one free scoop reward may be redeemed per transaction across all programmes.
-          </p>
-        </div>
-      </section>
-
-      <section className="section lp-gallery" id="gallery">
-        <div className="container">
-          <Reveal className="lp-title">
-            <span className="eyebrow">Moments from the parlour</span>
-            <h2>Our <em className="accent">gallery</em></h2>
-          </Reveal>
-          <Gallery />
-        </div>
-      </section>
-
-      <section className="section lp-craft" style={{ '--img': bgImage(images.conesFlatlay) }}>
-        <div className="container">
-          <Reveal className="lp-title lp-title--light">
-            <span className="eyebrow">The craft</span>
-            <h2>Good ice cream is <em className="accent">patient</em></h2>
-            <Ornament light />
-          </Reveal>
-          <Reveal className="craft-grid">
-            {CRAFT.map((c, i) => (
-              <div className="craft-step" key={c.title}>
-                <div className="craft-step__num">{['I', 'II', 'III'][i]}</div>
-                <h3>{c.title}</h3>
-                <p>{c.text}</p>
-              </div>
-            ))}
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section bg-photo bg-photo--cream" style={{ '--img': bgImage(images.sundae) }}>
-        <div className="container">
-          <Reveal className="lp-title">
-            <span className="eyebrow">Kind words</span>
-            <h2>Loved, <em className="accent">one scoop</em> at a time</h2>
-          </Reveal>
-          <div className="reviews">
-            {REVIEWS.map((r, i) => (
-              <Reveal as="article" className="review" key={r.name} delay={i * 100}>
-                <div className="review__stars" aria-label="5 out of 5 stars">★★★★★</div>
-                <blockquote>“{r.quote}”</blockquote>
-                <div className="review__who">
-                  <span className="review__avatar" aria-hidden="true">{r.name[0]}</span>
-                  <div>{r.name}<span>{r.where}</span></div>
-                </div>
+          <ul className="why-grid">
+            {WHY.map((w, i) => (
+              <Reveal as="li" className="why-card" key={w.title} delay={i * 70}>
+                <span className="why-card__icon" aria-hidden="true">
+                  <WhyIcon name={w.icon} />
+                </span>
+                <h3>{w.title}</h3>
+                <p>{w.text}</p>
               </Reveal>
             ))}
-          </div>
+          </ul>
+        </div>
+      </section>
+
+      <section className="section lp-story">
+        <div className="container lp-story__grid">
+          <Reveal className="lp-story__photo">
+            <img
+              src={images.conesFlatlay}
+              alt="Ice cream cones with berries and flowers, photographed from above"
+              width="1600"
+              height="1067"
+              loading="lazy"
+              decoding="async"
+            />
+          </Reveal>
+          <Reveal className="lp-story__copy" delay={100}>
+            <p className="mm-hero__label">Our story</p>
+            <h2>It started with <em className="accent">one mango</em></h2>
+            <p>
+              Every summer, our founder’s grandmother would turn the season’s best Alphonsos into a hand-churned ice cream so smooth it disappeared before it could melt. Melting Mango began as an attempt to bottle that feeling.
+            </p>
+            <p>
+              Ten years on we still churn in small batches, still hand-pulp every mango, and still taste every tray before the doors open.
+            </p>
+            <Link to="/story" className="btn btn--ghost">Read our story</Link>
+          </Reveal>
         </div>
       </section>
 

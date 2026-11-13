@@ -158,7 +158,7 @@ p { margin: 0; }
 
 em.accent {
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--mango);
 }
 .section--ink em.accent { color: var(--mango); }
@@ -185,6 +185,8 @@ em.accent {
 .btn--mango:hover { background: var(--mango-hover); }
 .btn--ghost { border-color: var(--ink); color: var(--ink); background: transparent; border-width: 1.5px; }
 .btn--ghost:hover { background: var(--ink); color: var(--white); }
+.btn--ink { background: var(--ink); color: var(--cream); }
+.btn--ink:hover { background: var(--ink-soft); box-shadow: var(--shadow-sm); }
 .btn--block { width: 100%; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 

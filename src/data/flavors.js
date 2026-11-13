@@ -34,6 +34,7 @@ export const flavors = [
     vessel: 'waffle',
     tint: '#FFF3C4',
     photo: '/images/mango-scoops.webp',
+    scoop: '/images/scoops/mango.webp',
     rating: 4.9,
   },
   {
@@ -50,6 +51,7 @@ export const flavors = [
     vessel: 'cup',
     tint: '#ECECEE',
     photo: '/images/chocolate-cones.webp',
+    scoop: '/images/scoops/chocolate.webp',
     rating: 4.8,
   },
   {
@@ -66,6 +68,7 @@ export const flavors = [
     vessel: 'sugar',
     tint: '#F6F6F7',
     photo: '/images/waffle-bowl.webp',
+    scoop: '/images/scoops/pista.webp',
     rating: 4.8,
   },
   {
@@ -82,6 +85,7 @@ export const flavors = [
     vessel: 'waffle',
     tint: '#FFF6D6',
     photo: '/images/cones-flatlay.webp',
+    scoop: '/images/scoops/chickoo.webp',
     rating: 4.9,
   },
   {
@@ -98,6 +102,7 @@ export const flavors = [
     vessel: 'cup',
     tint: '#F6F6F7',
     photo: '/images/parfait.webp',
+    scoop: '/images/scoops/banana-split.webp',
     rating: 4.8,
   },
 ];

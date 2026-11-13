@@ -3,6 +3,7 @@ export const images = {
   chocolateCones: '/images/chocolate-cones.webp',
   conesFlatlay: '/images/cones-flatlay.webp',
   heroCone: '/images/hero-cone.webp',
+  heroBowl: '/images/hero-bowl.webp',
   mangoScoops: '/images/mango-scoops.webp',
   parfait: '/images/parfait.webp',
   popsicles: '/images/popsicles.webp',

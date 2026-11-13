@@ -64,7 +64,7 @@ export default function Navbar() {
             </ul>
           </nav>
           <div className="nav__actions">
-            <Link to="/menu" className="btn btn--primary">
+            <Link to="/menu" className="btn btn--ink">
               Order now
             </Link>
             <button type="button" className="cart-btn" onClick={open} aria-label={`Open bag, ${count} ${count === 1 ? 'item' : 'items'}`}>
@@ -92,7 +92,7 @@ export default function Navbar() {
 
       <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Mobile" hidden={!menuOpen}>
         {LINKS.map((l) => navLink(l, { key: l.to }))}
-        <Link to="/menu" className="btn btn--primary mobile-menu__cta" onClick={closeMenu}>
+        <Link to="/menu" className="btn btn--ink mobile-menu__cta" onClick={closeMenu}>
           Order now
         </Link>
       </nav>
