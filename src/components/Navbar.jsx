@@ -42,14 +42,17 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const navLink = (l, extra) =>
-    l.hash ? (
-      <Link to={l.to} onClick={closeMenu} {...extra}>{l.label}</Link>
+  const navLink = (l, extra = {}) => {
+    const { key, ...rest } = extra;
+    const node = l.hash ? (
+      <Link to={l.to} onClick={closeMenu} {...rest}>{l.label}</Link>
     ) : (
-      <NavLink to={l.to} end={l.end} onClick={closeMenu} {...extra}>
+      <NavLink to={l.to} end={l.end} onClick={closeMenu} {...rest}>
         {l.label}
       </NavLink>
     );
+    return key != null ? <span key={key} style={{ display: 'contents' }}>{node}</span> : node;
+  };
 
   return (
     <>
@@ -64,13 +67,6 @@ export default function Navbar() {
             </ul>
           </nav>
           <div className="nav__actions">
-            <Link to="/visit" className="nav__pin">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" />
-                <circle cx="12" cy="10" r="2.3" />
-              </svg>
-              Jubilee Hills, Hyderabad
-            </Link>
             <Link to="/menu" className="btn btn--ink">
               Order now
             </Link>
@@ -98,10 +94,15 @@ export default function Navbar() {
       </header>
 
       <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Mobile" hidden={!menuOpen}>
-        {LINKS.map((l) => navLink(l, { key: l.to }))}
-        <Link to="/visit" className="nav__pin nav__pin--mobile" onClick={closeMenu}>
-          Jubilee Hills, Hyderabad
-        </Link>
+        {LINKS.map((l) =>
+          l.hash ? (
+            <Link key={l.to} to={l.to} onClick={closeMenu}>{l.label}</Link>
+          ) : (
+            <NavLink key={l.to} to={l.to} end={l.end} onClick={closeMenu}>
+              {l.label}
+            </NavLink>
+          )
+        )}
         <Link to="/menu" className="btn btn--ink mobile-menu__cta" onClick={closeMenu}>
           Order now
         </Link>

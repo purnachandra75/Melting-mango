@@ -5,6 +5,13 @@ export const images = {
   heroCone: '/images/hero-cone.webp',
   heroBowl: '/images/hero-bowl.webp',
   heroCup: '/images/hero-mango-cup.webp',
+  heroCups: {
+    mango: '/images/hero-mango-cup.webp',
+    chocolate: '/images/hero-chocolate-cup.webp',
+    pista: '/images/hero-pista-cup.webp',
+    chickoo: '/images/hero-chickoo-cup.webp',
+    bananaSplit: '/images/hero-banana-split-cup.webp',
+  },
   parlourBg: '/images/parlour-bg.webp',
   parlourInterior: '/images/parlour-interior.webp',
   parlourDisplay: '/images/parlour-display.webp',

@@ -1,9 +1,9 @@
 /* ===========================================================
-   Hero v3, gallery, container cards, floating order button
+   Hero, gallery, container cards, floating order button
    and all ice-cream motion.
    =========================================================== */
 
-/* ---------- Professional melt-loader ---------- */
+/* ---------- Brand seal preloader (first load only) ---------- */
 #preloader {
   position: fixed;
   inset: 0;
@@ -11,7 +11,7 @@
   display: grid;
   place-items: center;
   background: var(--cream);
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s;
   overflow: hidden;
 }
 #preloader.is-done {
@@ -20,165 +20,81 @@
   pointer-events: none;
 }
 #preloader .pl-inner {
-  position: relative;
-  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  width: min(92vw, 400px);
-  opacity: 0;
-  animation: pl-pop 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  align-items: center;
 }
-#preloader .pl-eyebrow {
-  margin: 0 0 20px;
-  font-family: var(--font-body);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #9a9aa2;
-  opacity: 0;
-  animation: pl-fade-up 0.6s ease 0.12s forwards;
+#preloader .pl-mark {
+  position: relative;
+  width: 188px;
+  height: 188px;
+  display: grid;
+  place-items: center;
 }
-#preloader .pl-stage {
-  width: min(64vw, 260px);
-}
-#preloader .pl-scene {
+#preloader .pl-ring {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
   overflow: visible;
 }
-#preloader .pl-cone {
-  opacity: 0;
-  animation: pl-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+#preloader .pl-ring__track,
+#preloader .pl-ring__fill {
+  stroke-width: 1.75;
+  stroke-linecap: round;
 }
-#preloader .pl-scoops {
-  opacity: 0;
-  animation: pl-scoops-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+#preloader .pl-ring__track { stroke: rgba(58, 15, 1, 0.1); }
+#preloader .pl-ring__fill {
+  stroke: var(--mango);
+  stroke-dasharray: 352;
+  stroke-dashoffset: 0;
+  transform-origin: 60px 60px;
+  transform: rotate(-90deg);
+  animation: pl-draw 1.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-
-/* Cream melting down the cone */
-#preloader .pl-melt__body {
-  transform-box: fill-box;
-  transform-origin: top center;
+#preloader .pl-logo {
+  width: 148px;
+  height: 148px;
+  object-fit: contain;
   opacity: 0;
-  animation: pl-melt-down ease-out forwards;
+  transform: scale(0.92);
+  animation: pl-logo-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
 }
-#preloader .pl-melt__drop {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
-  animation: pl-drop-fall ease-out forwards;
-}
-#preloader .pl-rim-melt__pool {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
-  animation: pl-pool-in 1.2s ease 0.45s forwards;
-}
-
-#preloader .pl-brand {
+#preloader .pl-line {
+  margin: 22px 0 0;
   text-align: center;
-  margin-top: 8px;
-  opacity: 0;
-  animation: pl-fade-up 0.65s ease 0.3s forwards;
-}
-#preloader .pl-brand__name {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 6vw, 2.7rem);
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.025em;
-  line-height: 1.05;
-}
-#preloader .pl-brand__name em {
-  font-style: normal;
-  color: var(--mango);
-  font-weight: 800;
-}
-#preloader .pl-rule {
-  width: 40px;
-  height: 1px;
-  margin: 16px auto 12px;
-  background: #e5e5e8;
-}
-#preloader .pl-brand p {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1rem;
+  font-family: var(--font-serif);
   font-style: italic;
-  color: #6b6c74;
-}
-#preloader .pl-status {
-  margin: 28px 0 0;
-  font-family: var(--font-body);
-  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #b0b1b6;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
   opacity: 0;
-  animation: pl-fade-up 0.6s ease 0.55s forwards, pl-status-pulse 1.6s ease-in-out 1.1s infinite;
+  animation: pl-line-in 0.6s ease 0.28s forwards;
 }
 
-@keyframes pl-melt-down {
-  0%   { transform: scaleY(0.05); opacity: 0; }
-  10%  { opacity: 1; }
-  100% { transform: scaleY(1); opacity: 0.95; }
+@keyframes pl-draw {
+  from { stroke-dashoffset: 352; }
+  to   { stroke-dashoffset: 0; }
 }
-@keyframes pl-drop-fall {
-  0%   { transform: translateY(0); opacity: 0; }
-  12%  { opacity: 1; }
-  100% { transform: translateY(var(--fall, 80px)); opacity: 0.95; }
+@keyframes pl-logo-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
 }
-@keyframes pl-pool-in {
-  0%   { opacity: 0; transform: scaleX(0.35); }
-  100% { opacity: 0.9; transform: scaleX(1); }
-}
-@keyframes pl-scoops-in {
-  0%   { opacity: 0; transform: translateY(-14px); }
-  100% { opacity: 1; transform: none; }
-}
-@keyframes pl-pop {
-  0% { opacity: 0; transform: translateY(14px); }
-  100% { opacity: 1; transform: none; }
-}
-@keyframes pl-fade-up {
-  0% { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: none; }
-}
-@keyframes pl-status-pulse {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 1; }
+@keyframes pl-line-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
 }
 
-@media (max-width: 640px) {
-  #preloader .pl-stage { width: min(72vw, 220px); }
-  #preloader .pl-eyebrow { letter-spacing: 0.18em; }
-}
 @media (prefers-reduced-motion: reduce) {
-  #preloader .pl-inner,
-  #preloader .pl-eyebrow,
-  #preloader .pl-brand,
-  #preloader .pl-cone,
-  #preloader .pl-scoops,
-  #preloader .pl-melt__body,
-  #preloader .pl-melt__drop,
-  #preloader .pl-rim-melt__pool,
-  #preloader .pl-status {
+  #preloader .pl-ring__fill,
+  #preloader .pl-logo,
+  #preloader .pl-line {
     animation: none !important;
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
   }
-  #preloader .pl-inner,
-  #preloader .pl-eyebrow,
-  #preloader .pl-brand,
-  #preloader .pl-cone,
-  #preloader .pl-scoops,
-  #preloader .pl-status { opacity: 1; transform: none; }
-  #preloader .pl-melt__body { opacity: 0.95; transform: scaleY(1); }
-  #preloader .pl-melt__drop { opacity: 0.95; transform: translateY(var(--fall, 80px)); }
-  #preloader .pl-rim-melt__pool { opacity: 0.9; }
 }
 
 .lp-anim { opacity: 0; transform: translateY(16px); animation: rise 0.9s var(--ease) forwards; animation-delay: var(--d, 0s); }
@@ -202,7 +118,10 @@
 .mm-hero {
   position: relative;
   isolation: isolate;
-  padding: 108px 0 0;
+  padding: 124px 0 0;
+  --hero-accent: var(--mango);
+  --hero-soft: var(--mango-bright);
+  --hero-glow: rgba(252, 110, 4, 0.22);
   min-height: min(100svh, 920px);
   display: flex;
   flex-direction: column;
@@ -289,8 +208,9 @@
   top: 8px;
   width: 58px;
   height: 46px;
-  color: var(--mango);
+  color: var(--hero-accent, var(--mango));
   pointer-events: none;
+  transition: color 0.8s ease;
 }
 
 .mm-hero__ribbon {
@@ -298,7 +218,8 @@
   margin: 0 0 18px;
   padding: 8px 22px 9px;
   background:
-    linear-gradient(180deg, #ffd36a 0%, var(--mango-bright) 48%, #e8a63d 100%);
+    linear-gradient(180deg, var(--hero-soft, #ffd36a) 0%, var(--mango-bright) 48%, #e8a63d 100%);
+  transition: background 0.8s ease;
   color: var(--ink);
   font-family: var(--font-body);
   font-weight: 600;
@@ -315,7 +236,7 @@
   font-size: 1.05rem;
   line-height: 1.65;
   max-width: 26rem;
-  margin: 0 0 26px;
+  margin: 0 0 24px;
 }
 
 .mm-hero__cta {
@@ -330,6 +251,25 @@
   width: 100%;
   max-width: 680px;
   justify-self: end;
+  position: relative;
+}
+
+.mm-hero__glow {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  height: 58%;
+  background: radial-gradient(ellipse at 50% 70%, var(--hero-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.8s ease;
+}
+
+.mm-hero__stage {
+  position: relative;
+  width: 100%;
+  z-index: 1;
 }
 
 .mm-hero__cup {
@@ -341,6 +281,72 @@
   /* Shadow is baked into the cut-out — do not add another. */
   filter: none;
   background: transparent;
+  display: block;
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.mm-hero__cup.is-active {
+  position: relative;
+  opacity: 1;
+  transform: scale(1);
+  z-index: 1;
+}
+
+.mm-hero__flavors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+.mm-hero__flavor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px 6px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.mm-hero__flavor:hover {
+  border-color: var(--ink-line);
+  background: var(--white);
+}
+.mm-hero__flavor.is-active {
+  border-color: var(--ink);
+  background: var(--white);
+  box-shadow: 0 2px 10px -4px rgba(58, 15, 1, 0.28);
+}
+.mm-hero__flavor:focus-visible {
+  outline: 2px solid var(--mango);
+  outline-offset: 2px;
+}
+.mm-hero__swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--swatch, var(--mango));
+  box-shadow: inset 0 0 0 1px rgba(58, 15, 1, 0.14);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-hero__cup {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* Stats strip overlapping the hero foot */
@@ -363,8 +369,23 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 6px 16px;
   position: relative;
+}
+.mm-stats__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+}
+.mm-stats__num {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.45rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
 
 .mm-stats__item:not(:last-child)::after {
@@ -392,10 +413,16 @@
 
 .mm-stats__label {
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   line-height: 1.3;
   color: var(--ink);
-  max-width: 11em;
+  max-width: 12em;
+}
+.mm-stats__num + .mm-stats__label {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--slate);
+  letter-spacing: 0.01em;
 }
 
 @media (max-width: 1100px) {
@@ -408,7 +435,7 @@
 @media (max-width: 900px) {
   .mm-hero {
     min-height: 0;
-    padding-top: 96px;
+    padding-top: 108px;
   }
   .mm-hero__grid {
     grid-template-columns: 1fr;
@@ -446,19 +473,33 @@
 }
 
 @media (max-width: 560px) {
-  .mm-hero { padding-top: 84px; padding-bottom: 12px; }
-  .mm-hero__script { font-size: 2.05rem; }
-  .mm-hero__copy h1 { font-size: 2.65rem; }
+  .mm-hero { padding-top: 80px; padding-bottom: 8px; }
+  .mm-hero__flavors {
+    margin-top: 14px;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    margin-right: -16px;
+    padding-right: 16px;
+  }
+  .mm-hero__flavors::-webkit-scrollbar { display: none; }
+  .mm-hero__flavor { font-size: 0.74rem; padding: 5px 10px 5px 7px; flex-shrink: 0; }
+  .mm-hero__script { font-size: 1.95rem; }
+  .mm-hero__copy h1 { font-size: 2.45rem; margin-bottom: 12px; }
   .mm-hero__splash { display: none; }
-  .mm-hero__ribbon { font-size: 0.82rem; padding: 7px 14px 8px; }
-  .mm-hero__lead { font-size: 0.95rem; margin-bottom: 16px; }
+  .mm-hero__ribbon { font-size: 0.8rem; padding: 6px 12px 7px; }
+  .mm-hero__lead { font-size: 0.92rem; margin-bottom: 14px; }
   .mm-hero__cta { width: auto; justify-content: center; }
-  .mm-hero__figure { max-width: 248px; }
-  .mm-hero__cup { max-height: 38vh; }
-  .mm-stats { margin: 4px 0 76px; } /* leave a clear well for the order FAB */
-  .mm-stats__icon { width: 38px; height: 38px; }
-  .mm-stats__icon svg { width: 22px; height: 22px; }
-  .mm-stats__label { font-size: 0.78rem; }
+  .mm-hero__figure { max-width: 220px; }
+  .mm-hero__cup { max-height: 32vh; }
+  .mm-stats { margin: 2px 0 80px; } /* clear well for the order FAB */
+  .mm-stats__icon { width: 36px; height: 36px; }
+  .mm-stats__icon svg { width: 20px; height: 20px; }
+  .mm-stats__label { font-size: 0.74rem; }
+  .mm-stats__num { font-size: 1.25rem; }
 }
 
 

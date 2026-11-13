@@ -9,8 +9,8 @@ export default function Logo({ onClick }) {
           className="brand__logo"
           src="/images/melting-logo.png"
           alt=""
-          width="52"
-          height="52"
+          width="70"
+          height="70"
           decoding="async"
         />
       </picture>
