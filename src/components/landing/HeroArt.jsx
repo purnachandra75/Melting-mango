@@ -7,7 +7,7 @@ import { scoopPath } from '../Scoop';
  */
 
 function Cube({ x, y, s, r = 0, className = '', delay = 0 }) {
-  const d = s * 0.32; // depth of the isometric top/side faces
+  const d = s * 0.32;
   return (
     <g className={className} style={{ animationDelay: `${delay}s` }}>
       <g transform={`translate(${x} ${y}) rotate(${r})`}>
@@ -54,8 +54,8 @@ export default function HeroArt() {
     <svg className="hero-art" viewBox="0 0 640 680" role="img" aria-label="A three-scoop mango ice cream cone with mango cubes and a mango splash">
       <defs>
         <radialGradient id="hx-glow" cx="0.45" cy="0.4" r="0.6">
-          <stop offset="0" stopColor="#FFF6D2" />
-          <stop offset="1" stopColor="#FBD670" />
+          <stop offset="0" stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="hx-scoop" cx="0.35" cy="0.28" r="0.85">
           <stop offset="0" stopColor="#FFE39A" />
@@ -95,22 +95,17 @@ export default function HeroArt() {
         </linearGradient>
       </defs>
 
-      {/* glow disc */}
       <circle className="hx-glow" cx="330" cy="300" r="262" fill="url(#hx-glow)" />
 
-      {/* leaves behind */}
       <Leaf x={470} y={110} scale={1.05} r={-28} className="hx-sway" />
       <Leaf x={40} y={640} scale={0.9} r={-40} className="hx-sway hx-sway--slow" />
 
-      {/* back splash ribbon */}
       <path className="hx-splash hx-splash--back" d="M 548 470 C 600 380 560 300 500 290" stroke="url(#hx-splash)" strokeWidth="16" fill="none" strokeLinecap="round" />
 
-      {/* cone */}
       <path d="M 196 378 L 404 378 L 300 664 Z" fill="url(#hx-waffle)" />
       <path d="M 196 378 L 404 378 L 300 664 Z" fill="url(#hx-cone-shade)" />
       <path d="M 196 378 L 404 378 L 300 664 Z" fill="none" stroke="#B9783A" strokeWidth="3" strokeLinejoin="round" />
 
-      {/* scoops */}
       {SCOOPS.map((s, i) => {
         const d = scoopPath(300, s.cy, s.r, s.drip);
         return (
@@ -122,33 +117,27 @@ export default function HeroArt() {
         );
       })}
 
-      {/* mango sauce on the top scoop, with slowly stretching drips */}
       <path d="M 210 166 A 92 92 0 0 1 390 166 C 384 196 360 186 344 204 C 330 220 306 196 290 210 C 272 226 252 198 236 206 C 222 212 212 196 210 166 Z" fill="url(#hx-sauce)" />
       {SAUCE_DRIPS.map((d, i) => (
         <rect key={i} className="hx-drip" x={d.x} y="186" width={d.w} height={d.h} rx={d.w / 2} fill="#F7A100" style={{ animationDelay: `${i * 0.8}s` }} />
       ))}
       <path d="M 232 130 A 72 72 0 0 1 300 92" stroke="#fff" strokeOpacity="0.6" strokeWidth="7" strokeLinecap="round" fill="none" />
 
-      {/* cubes resting on top */}
       <Cube x={262} y={44} s={58} r={-12} className="hx-bob" />
       <Cube x={334} y={92} s={38} r={18} className="hx-bob" delay={0.6} />
 
-      {/* front splash ribbon */}
       <path className="hx-splash" d="M 110 500 C 150 610 290 650 420 610 C 500 586 548 532 552 470" stroke="url(#hx-splash)" strokeWidth="20" fill="none" strokeLinecap="round" opacity="0.92" />
       <path className="hx-splash hx-splash--thin" d="M 150 560 C 240 640 380 650 470 600" stroke="#FFD25E" strokeWidth="8" fill="none" strokeLinecap="round" />
 
-      {/* droplets */}
       {DROPLETS.map((p, i) => (
         <circle key={i} className="hx-drop" cx={p.cx} cy={p.cy} r={p.r} fill="#FFB31A" style={{ animationDelay: `${i * 0.45}s` }} />
       ))}
 
-      {/* floating cubes */}
       <Cube x={70} y={300} s={60} r={-14} className="hx-float" />
       <Cube x={150} y={440} s={30} r={22} className="hx-float hx-float--b" delay={1.1} />
       <Cube x={520} y={180} s={50} r={10} className="hx-float hx-float--b" delay={0.4} />
       <Cube x={540} y={560} s={26} r={-20} className="hx-float" delay={1.6} />
 
-      {/* leaf in front */}
       <Leaf x={500} y={640} scale={0.8} r={-30} className="hx-sway" />
     </svg>
   );

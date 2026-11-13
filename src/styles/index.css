@@ -37,7 +37,7 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--ink);
-  background: var(--cream);
+  background: #ffffff;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
