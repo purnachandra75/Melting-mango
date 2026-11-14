@@ -12,17 +12,6 @@ const LINKS = [
   { to: '/visit', label: 'Contact' },
 ];
 
-function Leaves() {
-  return (
-    <svg className="nav__leaves" viewBox="0 0 160 120" aria-hidden="true">
-      <path d="M-6 30C22 4 62 0 96 14 64 30 26 40-6 30Z" fill="#3E7B2C" />
-      <path d="M-6 30C30 22 62 18 96 14" stroke="#2C5A1F" strokeWidth="1.4" fill="none" />
-      <path d="M-10 70C6 36 38 20 70 22 52 48 22 68-10 70Z" fill="#5A9A3A" />
-      <path d="M-10 70C18 50 42 34 70 22" stroke="#3E7B2C" strokeWidth="1.3" fill="none" />
-    </svg>
-  );
-}
-
 export default function Navbar() {
   const { count, open } = useCart();
   const [scrolled, setScrolled] = useState(false);
@@ -58,7 +47,6 @@ export default function Navbar() {
   return (
     <>
       <header className={`nav ${scrolled || menuOpen ? 'nav--scrolled' : ''}`}>
-        <Leaves />
         <div className="container nav__inner">
           <Logo onClick={closeMenu} />
           <nav aria-label="Primary">

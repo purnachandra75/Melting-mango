@@ -23,9 +23,6 @@ const FEATURES = [
 export default function Hero() {
   return (
     <section className="r2-hero" aria-label="Introduction">
-      <img className="r2-hero__blur r2-hero__blur--l" src={images.heroMango} alt="" aria-hidden="true" />
-      <img className="r2-hero__blur r2-hero__blur--r" src={images.heroMango} alt="" aria-hidden="true" />
-
       <div className="container r2-hero__grid">
         <div className="r2-hero__copy">
           <p className="r2-eyebrow">Artisan Ice Cream <span aria-hidden="true">•</span> Since Day One</p>
@@ -35,23 +32,24 @@ export default function Hero() {
             Happiness
           </h1>
           <p className="r2-hero__lead">
-            Small-batch, slow-churned ice cream made every morning with ripe fruit, real cream and
-            nothing artificial.
+            Handcrafted ice creams with real Alphonso mangoes and premium ingredients.
           </p>
           <div className="r2-hero__actions">
-            <Link to="/menu" className="r2-btn r2-btn--solid">Explore Menu <span aria-hidden="true">{'\u2192'}</span></Link>
-            <Link to="/visit" className="r2-btn r2-btn--line">Find a Parlour</Link>
+            <Link to="/menu" className="r2-btn r2-btn--solid">Explore Menu <span aria-hidden="true">{'→'}</span></Link>
+            <Link to="/visit" className="r2-btn r2-btn--line">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Find a Parlour
+            </Link>
           </div>
         </div>
 
         <figure className="r2-hero__art">
-          <span className="r2-hero__glow" aria-hidden="true" />
           <img
-            className="r2-hero__bowl"
-            src={images.heroBowl2}
-            alt="A speckled ceramic bowl of mango ice cream scoops with mango sauce, fresh mango cubes and mango leaves"
-            width="1008"
-            height="713"
+            className="r2-hero__ref"
+            src={images.heroBowlCut}
+            alt="A speckled ceramic bowl piled with mango ice cream scoops, mango sauce, mango cubes, a cube-cut mango and leaves"
+            width="1030"
+            height="646"
           />
         </figure>
 
@@ -59,6 +57,7 @@ export default function Hero() {
           <span className="r2-badge__tail r2-badge__tail--l" aria-hidden="true" />
           <span className="r2-badge__tail r2-badge__tail--r" aria-hidden="true" />
           <span className="r2-badge__disc">
+            <svg className="r2-badge__leaf" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M5 19c9 0 14-6 14-14C10 5 5 10 5 19Zm0 0c3-4 6-7 10-9" /></svg>
             <small>Made with</small>
             <strong>Real</strong>
             <em>Alphonso</em>
@@ -79,9 +78,6 @@ export default function Hero() {
           ))}
         </ul>
       </div>
-      <svg className="r2-wave-line" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 22c120-16 240-16 360 0s240 16 360 0 240-16 360 0 240 16 360 0" fill="none" stroke="currentColor" strokeWidth="2" />
-      </svg>
     </section>
   );
 }

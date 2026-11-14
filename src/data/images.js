@@ -8,6 +8,13 @@ export const images = {
   heroWaffle: '/images/hero-waffle-bowl.webp',
   heroMango: '/images/hero-mango-sun.webp',
   heroBowl2: '/images/hero-mango-bowl.webp',
+  heroBg: '/images/hero-bg.webp',
+  heroBanner: '/images/hero-banner.gif',
+  heroBowlCut: '/images/hero-mango-bowl-cut.webp',
+  heroBowlRef: '/images/hero-mango-bowl-ref.webp',
+  mangoScoopsStack: '/images/mango-scoops-stack.webp',
+  mangoSlices: '/images/mango-slices.webp',
+  mangoHedgehog: '/images/mango-hedgehog.webp',
   heroCups: {
     mango: '/images/hero-mango-cup.webp',
     chocolate: '/images/hero-chocolate-cup.webp',

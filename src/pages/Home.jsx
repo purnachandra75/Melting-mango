@@ -88,6 +88,7 @@ export default function Home() {
       </section>
 
       <section className="r2-passport-wrap" aria-labelledby="passport-title" id="rewards">
+        <svg className="r2-leaf r2-leaf--passport" viewBox="0 0 80 50" aria-hidden="true"><path d="M2 40C20 6 52-2 78 8 62 34 34 48 2 40Z" fill="#4E8E30" /><path d="M2 40C28 28 52 16 78 8" stroke="#2F6020" strokeWidth="1.5" fill="none" /></svg>
         <div className="container">
           <Reveal className="r2-passport">
             <div className="r2-passport__visual" aria-hidden="true">
@@ -96,7 +97,9 @@ export default function Home() {
                 <span className="r2-pcard__title">Flavor Passport</span>
                 <span className="r2-pcard__stamps">
                   {Array.from({ length: PASSPORT.stamps - 1 }, (_, i) => (
-                    <span key={i} className={i < 3 ? 'is-on' : ''} />
+                    <span key={i} className={i < 3 ? 'is-on' : ''}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 20c-5-3-6-10-3-14s10-5 13-1c3 5-2 17-10 15Z" /></svg>
+                    </span>
                   ))}
                 </span>
               </div>
@@ -105,7 +108,8 @@ export default function Home() {
             <div className="r2-passport__copy">
               <p className="r2-passport__label">Mango Rewards</p>
               <h2 id="passport-title">{PASSPORT.name}</h2>
-              <p>{PASSPORT.highlight}!</p>
+              <p className="r2-passport__hl">Collect {PASSPORT.stamps} stamps, earn a free scoop!</p>
+              <p className="r2-passport__desc">{PASSPORT.tagline}. Enrol once at the counter or online, and we’ll keep track.</p>
             </div>
             <Link to="/visit" className="r2-btn r2-btn--white">Enrol at a Parlour <Arrow /></Link>
           </Reveal>

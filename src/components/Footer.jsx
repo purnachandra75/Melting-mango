@@ -27,7 +27,7 @@ export default function Footer() {
       <div className="container r2-footer__top">
         <div className="r2-footer__brand">
           <Logo />
-          <p>Small-batch, slow-churned ice cream made every morning with ripe fruit, real cream and nothing artificial.</p>
+          <p>Pure Ice Cream.<br />Real Ingredients.<br />Handcrafted Daily.</p>
         </div>
         <div>
           <h2 className="r2-footer__h">Quick Links</h2>
