@@ -6,6 +6,7 @@ export const images = {
   heroBowl: '/images/hero-bowl.webp',
   heroCup: '/images/hero-mango-cup.webp',
   heroWaffle: '/images/hero-waffle-bowl.webp',
+  heroMango: '/images/hero-mango-sun.webp',
   heroCups: {
     mango: '/images/hero-mango-cup.webp',
     chocolate: '/images/hero-chocolate-cup.webp',

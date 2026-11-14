@@ -1,121 +1,80 @@
 import { Link } from 'react-router-dom';
 import { images } from '../../data/images';
 import { flavors } from '../../data/flavors';
+import { LOCATIONS } from '../../data/locations';
+import { Clip, ClipLayer } from '../ClipArt';
 
-const STATS = [
-  {
-    kicker: String(flavors.length),
-    title: 'Flavours',
-    icon: (
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="8" r="4.6" />
-        <path d="M8.4 11.6 12 22l3.6-10.4" />
-        <path d="M9.7 15.2h4.6M10.4 18h3.2" />
-      </svg>
-    ),
-  },
-  {
-    kicker: 'Fresh &',
-    title: 'Natural Ingredients',
-    icon: (
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M7 20c6.5-.8 9.5-6.5 11-14-6 .8-11 4.2-11 14Z" />
-        <path d="M9.5 14c1.8 0 3.5-1.6 4.4-4.2" />
-        <path d="M5 18c2.2-2 3-5.2 3-8" />
-      </svg>
-    ),
-  },
-  {
-    kicker: 'Premium',
-    title: 'Quality',
-    icon: (
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 3.5 14.2 8l5 .7-3.6 3.5.9 5-4.5-2.4L6.5 17.2l.9-5L3.8 8.7l5-.7L12 3.5Z" />
-      </svg>
-    ),
-  },
-  {
-    kicker: 'Loved by',
-    title: 'Ice Cream Fans',
-    icon: (
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="9" cy="8" r="2.4" />
-        <circle cx="16" cy="9" r="2.1" />
-        <path d="M3.8 18.5c.6-3.2 2.7-5 5.2-5s4.6 1.8 5.2 5" />
-        <path d="M12.8 16.2c.7-1.8 2.2-2.8 4-2.8 2 0 3.6 1.3 4.2 3.6" />
-      </svg>
-    ),
-  },
+const FACTS = [
+  { big: String(flavors.length), small: 'Signature flavours' },
+  { big: 'Daily', small: 'Slow-churned fresh' },
+  { big: String(LOCATIONS.length), small: 'Parlours in India' },
 ];
-
-function Spark({ className }) {
-  return (
-    <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M16 0c.7 6.4 3.2 11.6 8 16-4.8 4.4-7.3 9.6-8 16-.7-6.4-3.2-11.6-8-16C12.8 11.6 15.3 6.4 16 0Z"
-      />
-    </svg>
-  );
-}
 
 export default function Hero() {
   return (
-    <section className="mm-hero" aria-label="Introduction">
-      <div className="mm-hero__scene" aria-hidden="true">
-        <img
-          className="mm-hero__bg"
-          src={images.parlourBg}
-          alt=""
-          width="2000"
-          height="1398"
-        />
-        <div className="mm-hero__veil" />
-      </div>
+    <section className="yl-hero" aria-label="Introduction">
+      <ClipLayer className="yl-clips yl-clips--hero">
+        <Clip kind="Mango" className="yc yc--h1" />
+        <Clip kind="Cone" className="yc yc--h2" />
+        <Clip kind="Sprinkles" className="yc yc--h3" />
+        <Clip kind="Sparkle" className="yc yc--h4" />
+        <Clip kind="Heart" className="yc yc--h5" />
+      </ClipLayer>
 
-      <div className="container mm-hero__grid">
-        <div className="mm-hero__copy">
-          <p className="mm-hero__script">A Scoop of</p>
-          <h1>
-            Happiness
-            <Spark className="mm-hero__spark mm-hero__spark--a" />
-            <Spark className="mm-hero__spark mm-hero__spark--b" />
-          </h1>
-          <p className="mm-hero__ribbon">Premium Ice Creams, Scoops &amp; Sundaes</p>
-          <p className="mm-hero__lead">
-            Rich flavours, fresh ingredients and irresistible creations for every mood.
+      <div className="container yl-hero__grid">
+        <div className="yl-hero__copy">
+          <p className="yl-eyebrow">
+            <span className="yl-eyebrow__dot" aria-hidden="true" />
+            Artisan ice cream · Since day one
           </p>
-          <Link to="/menu" className="btn btn--ink mm-hero__cta">
-            Explore Menu
-            <span aria-hidden="true">{" →"}</span>
-          </Link>
+          <h1 className="yl-hero__title">
+            Pure <em>mango</em>
+            <br />
+            happiness, scooped fresh.
+          </h1>
+          <p className="yl-hero__lead">
+            Small-batch, slow-churned ice cream made every morning with hand-pulped
+            Alphonso mangoes, real cream and nothing artificial.
+          </p>
+          <div className="yl-hero__actions">
+            <Link to="/menu" className="yl-btn yl-btn--solid">
+              Explore the menu <span aria-hidden="true">{'\u2192'}</span>
+            </Link>
+            <Link to="/visit" className="yl-btn yl-btn--line">
+              Find a parlour
+            </Link>
+          </div>
+          <ul className="yl-facts">
+            {FACTS.map((f) => (
+              <li key={f.small}>
+                <strong>{f.big}</strong>
+                <span>{f.small}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <figure className="mm-hero__figure">
+        <figure className="yl-hero__art">
+          <span className="yl-hero__sun" aria-hidden="true" />
+          <span className="yl-hero__ring" aria-hidden="true" />
           <img
-            className="mm-hero__cup"
-            src={images.heroWaffle}
-            alt="A waffle bowl filled with strawberry, chocolate and vanilla ice cream, chocolate drizzle, a cherry, a wafer and fresh strawberries"
-            width="958"
-            height="829"
+            className="yl-hero__img"
+            src={images.heroMango}
+            alt="A cup of mango and vanilla ice cream with mango sauce, mango cubes, mint and a wafer roll, beside fresh cut mango"
+            width="1006"
+            height="882"
             decoding="async"
           />
+          <figcaption className="yl-hero__tag">
+            <span className="yl-hero__tag-k">House signature</span>
+            <span className="yl-hero__tag-v">Alphonso Mango</span>
+          </figcaption>
         </figure>
       </div>
 
-      <div className="container">
-        <ul className="mm-stats">
-          {STATS.map((s) => (
-            <li key={s.title} className="mm-stats__item">
-              <span className="mm-stats__icon">{s.icon}</span>
-              <span className="mm-stats__text">
-                <strong className="mm-stats__num">{s.kicker}</strong>
-                <span className="mm-stats__label">{s.title}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <svg className="yl-wave yl-wave--hero" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 64c160 40 320 46 480 22S800 18 960 30s320 60 480 40v40H0Z" fill="currentColor" />
+      </svg>
     </section>
   );
 }
