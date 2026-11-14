@@ -6,11 +6,22 @@ import { useCart } from '../context/CartContext';
 const LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/menu', label: 'Menu' },
-  { to: '/menu', label: 'Our Flavours' },
+  { to: '/menu#flavours', label: 'Our Flavours', hash: true },
   { to: '/story', label: 'About Us' },
   { to: '/#gallery', label: 'Gallery', hash: true },
   { to: '/visit', label: 'Contact' },
 ];
+
+function Leaves() {
+  return (
+    <svg className="nav__leaves" viewBox="0 0 160 120" aria-hidden="true">
+      <path d="M-6 30C22 4 62 0 96 14 64 30 26 40-6 30Z" fill="#3E7B2C" />
+      <path d="M-6 30C30 22 62 18 96 14" stroke="#2C5A1F" strokeWidth="1.4" fill="none" />
+      <path d="M-10 70C6 36 38 20 70 22 52 48 22 68-10 70Z" fill="#5A9A3A" />
+      <path d="M-10 70C18 50 42 34 70 22" stroke="#3E7B2C" strokeWidth="1.3" fill="none" />
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const { count, open } = useCart();
@@ -24,55 +35,52 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
   useEffect(() => setMenuOpen(false), [pathname]);
-
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
-
   useEffect(() => {
-    if (!menuOpen) return;
+    if (!menuOpen) return undefined;
     const onKey = (e) => e.key === 'Escape' && setMenuOpen(false);
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
+  const item = (l) =>
+    l.hash ? (
+      <Link to={l.to} onClick={closeMenu}>{l.label}</Link>
+    ) : (
+      <NavLink to={l.to} end={l.end} onClick={closeMenu}>{l.label}</NavLink>
+    );
 
   return (
     <>
-      <header className={`nav ${scrolled || menuOpen || pathname !== '/' ? 'nav--scrolled' : ''}`}>
+      <header className={`nav ${scrolled || menuOpen ? 'nav--scrolled' : ''}`}>
+        <Leaves />
         <div className="container nav__inner">
           <Logo onClick={closeMenu} />
           <nav aria-label="Primary">
             <ul className="nav__links">
-              {LINKS.map((l) => (
-                <li key={l.label}>
-                  {l.hash ? (
-                    <Link to={l.to} onClick={closeMenu}>{l.label}</Link>
-                  ) : (
-                    <NavLink to={l.to} end={l.end} onClick={closeMenu}>
-                      {l.label}
-                    </NavLink>
-                  )}
-                </li>
-              ))}
+              {LINKS.map((l) => <li key={l.label}>{item(l)}</li>)}
             </ul>
           </nav>
           <div className="nav__actions">
-            <button type="button" className="nav__order" onClick={open}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                <path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" />
-                <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            <Link to="/menu" className="nav__icon" aria-label="Search the menu">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.2-4.2" />
               </svg>
-              Order Now
-              {count > 0 && <span className="nav__order-count" aria-hidden="true">{count}</span>}
-              <span className="sr-only">{`, ${count} ${count === 1 ? 'item' : 'items'} in bag`}</span>
+            </Link>
+            <button type="button" className="nav__icon" onClick={open} aria-label={`Open bag, ${count} ${count === 1 ? 'item' : 'items'}`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" />
+              </svg>
+              <span className="nav__badge" aria-hidden="true">{count}</span>
             </button>
+            <Link to="/menu" className="nav__cta">
+              Order Now <span aria-hidden="true">{'\u2192'}</span>
+            </Link>
             <button
               type="button"
               className="nav__toggle"
@@ -81,8 +89,8 @@ export default function Navbar() {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                {menuOpen ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 8h16M4 16h16" />}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                {menuOpen ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
               </svg>
             </button>
           </div>
@@ -90,18 +98,8 @@ export default function Navbar() {
       </header>
 
       <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Mobile" hidden={!menuOpen}>
-        {LINKS.map((l) =>
-          l.hash ? (
-            <Link key={l.label} to={l.to} onClick={closeMenu}>{l.label}</Link>
-          ) : (
-            <NavLink key={l.label} to={l.to} end={l.end} onClick={closeMenu}>
-              {l.label}
-            </NavLink>
-          )
-        )}
-        <button type="button" className="btn btn--ink mobile-menu__cta" onClick={() => { closeMenu(); open(); }}>
-          Order Now
-        </button>
+        {LINKS.map((l) => <span key={l.label} style={{ display: 'contents' }}>{item(l)}</span>)}
+        <Link to="/menu" className="nav__cta mobile-menu__cta" onClick={closeMenu}>Order Now</Link>
       </nav>
     </>
   );

@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/landing/Hero';
 import Reveal from '../components/Reveal';
-import { Clip, ClipLayer, Blob } from '../components/ClipArt';
+import { Clip } from '../components/ClipArt';
 import { images } from '../data/images';
-import { flavors, REWARDS } from '../data/flavors';
+import { REWARDS } from '../data/flavors';
 import { FLAGSHIP, HOURS, LOCATIONS } from '../data/locations';
 import { usePageTitle } from '../hooks/usePageTitle';
 
@@ -24,57 +23,40 @@ const REVIEWS = [
 ];
 
 const PASSPORT = REWARDS.find((r) => r.id === 'flavor-passport');
+const initials = (n) => n.split(' ').filter((p) => !p.endsWith('.')).map((p) => p[0]).join('').slice(0, 2);
+const Arrow = () => <span aria-hidden="true">{'\u2192'}</span>;
 
-const initials = (name) =>
-  name.split(' ').filter((p) => !p.endsWith('.')).map((p) => p[0]).join('').slice(0, 2);
+function Head({ kicker, title, id }) {
+  return (
+    <Reveal className="r2-head">
+      <p className="r2-kicker">{kicker}</p>
+      <h2 id={id} className="r2-h2">{title}</h2>
+      <span className="r2-squiggle" aria-hidden="true" />
+    </Reveal>
+  );
+}
 
 export default function Home() {
   usePageTitle(
     'Artisan Ice Cream',
     'Melting Mango — small-batch, slow-churned artisan ice cream made every morning with ripe fruit, real cream and nothing artificial. Parlours in Hyderabad, Bengaluru and Mumbai.'
   );
-  const [active, setActive] = useState(0);
 
   return (
     <>
       <Hero />
 
-      {/* Flavour ribbon */}
-      <section className="yl-ribbon" aria-label="Our flavours">
-        <div className="yl-ribbon__track">
-          {[...flavors, ...flavors].map((f, i) => (
-            <span key={`${f.id}-${i}`} className="yl-ribbon__item" aria-hidden={i >= flavors.length}>
-              <span className="yl-ribbon__dot" style={{ background: f.color }} />
-              {f.name}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* Specialities */}
-      <section className="yl-section yl-specials" id="gallery" aria-labelledby="specials-title">
-        <ClipLayer className="yl-clips">
-          <Blob className="yb yb--s1" />
-          <Clip kind="Sundae" className="yc yc--s1" />
-          <Clip kind="Popsicle" className="yc yc--s2" />
-          <Clip kind="Sparkle" className="yc yc--s3" />
-        </ClipLayer>
+      <section className="r2-section r2-specials" id="gallery" aria-labelledby="specials-title">
         <div className="container">
-          <Reveal className="yl-head">
-            <p className="yl-kicker">Our specialities</p>
-            <h2 id="specials-title" className="yl-h2">Made for every craving</h2>
-            <p className="yl-sub">Scoops, sundaes, cones and more — made fresh in our parlours every day.</p>
-          </Reveal>
-          <ul className="yl-cards">
+          <Head kicker="Our Specialities" title="Made for Every Craving" id="specials-title" />
+          <ul className="r2-cards">
             {SPECIALS.map((s, i) => (
               <Reveal as="li" key={s.name} delay={i * 50}>
-                <Link to="/menu" className="yl-card">
-                  <span className="yl-card__img"><img src={s.src} alt={s.alt} /></span>
-                  <span className="yl-card__body">
-                    <span className="yl-card__name">{s.name}</span>
-                    <span className="yl-card__note">{s.note}</span>
-                  </span>
-                  <span className="yl-card__go" aria-hidden="true">{'\u2192'}</span>
+                <Link to="/menu" className="r2-card">
+                  <span className="r2-card__img"><img src={s.src} alt={s.alt} /></span>
+                  <span className="r2-card__name">{s.name}</span>
+                  <span className="r2-card__note">{s.note}</span>
+                  <span className="r2-card__go" aria-hidden="true">{'\u2192'}</span>
                 </Link>
               </Reveal>
             ))}
@@ -82,27 +64,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About + Passport */}
-      <section className="yl-section yl-story" aria-label="About and rewards">
-        <svg className="yl-wave yl-wave--top" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 40c200-40 400-40 600-10s440 50 640 20 200-20 200-20V0H0Z" fill="currentColor" />
-        </svg>
-        <ClipLayer className="yl-clips">
-          <Clip kind="Scoop" className="yc yc--a1" />
-          <Clip kind="Mango" className="yc yc--a2" />
-          <Clip kind="Heart" className="yc yc--a3" />
-        </ClipLayer>
-        <div className="container yl-story__grid">
-          <Reveal className="yl-story__media">
+      <section className="r2-section r2-about" aria-labelledby="about-title">
+        <Clip kind="Mango" className="r2-about__art" />
+        <div className="container r2-about__grid">
+          <Reveal className="r2-about__photo">
             <img src={images.parlourInterior} alt="Sunlit cafe seating with a counter — a warm parlour interior" width="1800" height="1234" />
-            <span className="yl-story__badge">
-              <strong>Small</strong>
-              <span>batch, every morning</span>
-            </span>
           </Reveal>
-          <Reveal className="yl-story__copy" delay={80}>
-            <p className="yl-kicker">About our parlour</p>
-            <h2 className="yl-h2">A grandmother’s summer, bottled.</h2>
+          <Reveal className="r2-about__copy" delay={80}>
+            <p className="r2-kicker r2-kicker--left">About Our Parlour</p>
+            <h2 id="about-title" className="r2-h2">A Grandmother’s Summer, Bottled.</h2>
             <p>
               Every summer, our founder’s grandmother would turn the season’s best Alphonsos into a
               hand-churned ice cream so smooth it disappeared before it could melt. Melting Mango began
@@ -112,57 +82,48 @@ export default function Home() {
               Ten years on we still churn in small batches, still hand-pulp every mango, and still taste
               every tray before the doors open.
             </p>
-            <Link to="/story" className="yl-btn yl-btn--solid">Read our story <span aria-hidden="true">{'\u2192'}</span></Link>
-          </Reveal>
-        </div>
-
-        <div className="container">
-          <Reveal as="article" className="yl-passport" id="rewards">
-            <div className="yl-passport__copy">
-              <p className="yl-passport__label">Mango Rewards</p>
-              <h2>{PASSPORT.name}</h2>
-              <p className="yl-passport__hi">{PASSPORT.highlight}</p>
-              <p>Taste your way around the menu. Enrol once at the counter or online, and we’ll keep track.</p>
-              <Link to="/visit" className="yl-btn yl-btn--mango">Enrol at a parlour</Link>
-            </div>
-            <ol className="yl-stamps" aria-label={`${PASSPORT.stamps} stamps to a free scoop`}>
-              {Array.from({ length: PASSPORT.stamps }, (_, i) => (
-                <li key={i} className={i < PASSPORT.stamps - 1 ? 'is-on' : 'is-goal'}>
-                  {i < PASSPORT.stamps - 1 ? (flavors[i % flavors.length].name) : 'Free scoop'}
-                </li>
-              ))}
-            </ol>
+            <Link to="/story" className="r2-btn r2-btn--solid">Our Story <Arrow /></Link>
           </Reveal>
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="yl-section yl-reviews" aria-labelledby="reviews-title">
-        <ClipLayer className="yl-clips">
-          <Blob className="yb yb--r1" />
-          <Clip kind="Cone" className="yc yc--r1" />
-          <Clip kind="Sprinkles" className="yc yc--r2" />
-        </ClipLayer>
+      <section className="r2-passport-wrap" aria-labelledby="passport-title" id="rewards">
         <div className="container">
-          <Reveal className="yl-head">
-            <p className="yl-kicker">Kind words</p>
-            <h2 id="reviews-title" className="yl-h2">What our guests say</h2>
+          <Reveal className="r2-passport">
+            <div className="r2-passport__visual" aria-hidden="true">
+              <div className="r2-pcard">
+                <span className="r2-pcard__brand">Melting Mango</span>
+                <span className="r2-pcard__title">Flavor Passport</span>
+                <span className="r2-pcard__stamps">
+                  {Array.from({ length: PASSPORT.stamps - 1 }, (_, i) => (
+                    <span key={i} className={i < 3 ? 'is-on' : ''} />
+                  ))}
+                </span>
+              </div>
+              <img className="r2-passport__bowl" src={images.heroBowl2} alt="" />
+            </div>
+            <div className="r2-passport__copy">
+              <p className="r2-passport__label">Mango Rewards</p>
+              <h2 id="passport-title">{PASSPORT.name}</h2>
+              <p>{PASSPORT.highlight}!</p>
+            </div>
+            <Link to="/visit" className="r2-btn r2-btn--white">Enrol at a Parlour <Arrow /></Link>
           </Reveal>
-          <ul className="yl-quotes">
+        </div>
+      </section>
+
+      <section className="r2-section r2-reviews" aria-labelledby="reviews-title">
+        <div className="container">
+          <Head kicker="Kind Words" title="What Our Guests Say" id="reviews-title" />
+          <ul className="r2-quotes">
             {REVIEWS.map((r, i) => (
               <Reveal as="li" key={r.name} delay={i * 80}>
-                <figure
-                  className={`yl-quote${i === active ? ' is-active' : ''}`}
-                  onMouseEnter={() => setActive(i)}
-                >
-                  <span className="yl-quote__mark" aria-hidden="true">“</span>
+                <figure className={`r2-quote${i === 1 ? ' is-featured' : ''}`}>
+                  <span className="r2-quote__mark" aria-hidden="true">“</span>
                   <blockquote>{r.quote}</blockquote>
                   <figcaption>
-                    <span className="yl-quote__av" aria-hidden="true">{initials(r.name)}</span>
-                    <span>
-                      <strong>{r.name}</strong>
-                      <small>{r.where}</small>
-                    </span>
+                    <span className="r2-quote__av" aria-hidden="true">{initials(r.name)}</span>
+                    <span><strong>{r.name}</strong><small>{r.where}</small></span>
                   </figcaption>
                 </figure>
               </Reveal>
@@ -171,41 +132,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Visit */}
-      <section className="yl-section yl-visit" aria-labelledby="visit-title">
-        <div className="container">
-          <Reveal className="yl-visit__card">
-            <div className="yl-visit__copy">
-              <p className="yl-kicker">Visit us</p>
-              <h2 id="visit-title" className="yl-h2">Come in for a scoop</h2>
-              <dl className="yl-visit__list">
-                <div>
-                  <dt>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-                    {FLAGSHIP.name}, {FLAGSHIP.city}
-                  </dt>
-                  <dd>{FLAGSHIP.address}</dd>
-                </div>
-                <div>
-                  <dt>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><path d="M12 8v5l3 2" /></svg>
-                    Opening hours
-                  </dt>
-                  <dd>Mon – Thu {HOURS.weekday.label}<br />Fri – Sun {HOURS.weekend.label}</dd>
-                </div>
-                <div>
-                  <dt>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11" /><path d="M9 20v-6h6v6" /></svg>
-                    Also in
-                  </dt>
-                  <dd>{LOCATIONS.slice(1).map((l) => `${l.name}, ${l.city}`).join(' · ')}</dd>
-                </div>
-              </dl>
-              <Link to="/visit" className="yl-btn yl-btn--solid">All parlours <span aria-hidden="true">{'\u2192'}</span></Link>
-            </div>
-            <div className="yl-visit__media">
-              <img src={images.parlourDisplay} alt="A gelato display case with tubs of ice cream behind the parlour window" width="1150" height="650" />
-            </div>
+      <section className="r2-section r2-visit" aria-labelledby="visit-title">
+        <img className="r2-visit__blur" src={images.heroMango} alt="" aria-hidden="true" />
+        <div className="container r2-visit__grid">
+          <Reveal className="r2-visit__card">
+            <p className="r2-kicker r2-kicker--left">Visit Us</p>
+            <h2 id="visit-title" className="r2-h2">Come in for a Scoop</h2>
+            <ul className="r2-visit__list">
+              <li>
+                <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" /><circle cx="12" cy="10" r="2.3" /></svg></span>
+                <span><strong>{FLAGSHIP.name}, {FLAGSHIP.city}</strong><small>{FLAGSHIP.address}</small></span>
+              </li>
+              <li>
+                <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><path d="M12 8v5l3 2" /></svg></span>
+                <span><strong>Opening Hours</strong><small>Mon – Thu {HOURS.weekday.label}<br />Fri – Sun {HOURS.weekend.label}</small></span>
+              </li>
+              <li>
+                <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11" /><path d="M9 20v-6h6v6" /></svg></span>
+                <span><strong>Also In</strong><small>{LOCATIONS.slice(1).map((l) => `${l.name}, ${l.city}`).join(' · ')}</small></span>
+              </li>
+            </ul>
+            <Link to="/visit" className="r2-btn r2-btn--solid">All Parlours <Arrow /></Link>
+          </Reveal>
+          <Reveal className="r2-visit__photo" delay={80}>
+            <img src={images.parlourDisplay} alt="A gelato display case with tubs of ice cream behind the parlour window" width="1150" height="650" />
           </Reveal>
         </div>
       </section>

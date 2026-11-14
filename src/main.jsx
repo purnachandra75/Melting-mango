@@ -8,6 +8,7 @@ import './styles/landing.css';
 import './styles/hero.css';
 import './styles/copy.css';
 import './styles/yellow.css';
+import './styles/ref2.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
