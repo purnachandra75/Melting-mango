@@ -6,9 +6,10 @@ import { useCart } from '../context/CartContext';
 const LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/menu', label: 'Menu' },
-  { to: '/#rewards', label: 'Rewards', hash: true },
-  { to: '/story', label: 'Our Story' },
-  { to: '/visit', label: 'Visit' },
+  { to: '/menu', label: 'Our Flavours' },
+  { to: '/story', label: 'About Us' },
+  { to: '/#gallery', label: 'Gallery', hash: true },
+  { to: '/visit', label: 'Contact' },
 ];
 
 export default function Navbar() {
@@ -42,40 +43,35 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const navLink = (l, extra = {}) => {
-    const { key, ...rest } = extra;
-    const node = l.hash ? (
-      <Link to={l.to} onClick={closeMenu} {...rest}>{l.label}</Link>
-    ) : (
-      <NavLink to={l.to} end={l.end} onClick={closeMenu} {...rest}>
-        {l.label}
-      </NavLink>
-    );
-    return key != null ? <span key={key} style={{ display: 'contents' }}>{node}</span> : node;
-  };
-
   return (
     <>
-      <header className={`nav ${scrolled || menuOpen ? 'nav--scrolled' : ''}`}>
+      <header className={`nav ${scrolled || menuOpen || pathname !== '/' ? 'nav--scrolled' : ''}`}>
         <div className="container nav__inner">
           <Logo onClick={closeMenu} />
           <nav aria-label="Primary">
             <ul className="nav__links">
               {LINKS.map((l) => (
-                <li key={l.to}>{navLink(l)}</li>
+                <li key={l.label}>
+                  {l.hash ? (
+                    <Link to={l.to} onClick={closeMenu}>{l.label}</Link>
+                  ) : (
+                    <NavLink to={l.to} end={l.end} onClick={closeMenu}>
+                      {l.label}
+                    </NavLink>
+                  )}
+                </li>
               ))}
             </ul>
           </nav>
           <div className="nav__actions">
-            <Link to="/menu" className="btn btn--ink">
-              Order now
-            </Link>
-            <button type="button" className="cart-btn" onClick={open} aria-label={`Open bag, ${count} ${count === 1 ? 'item' : 'items'}`}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+            <button type="button" className="nav__order" onClick={open}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
                 <path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" />
                 <path d="M9 8V6a3 3 0 0 1 6 0v2" />
               </svg>
-              {count > 0 && <span className="cart-btn__count" aria-hidden="true">{count}</span>}
+              Order Now
+              {count > 0 && <span className="nav__order-count" aria-hidden="true">{count}</span>}
+              <span className="sr-only">{`, ${count} ${count === 1 ? 'item' : 'items'} in bag`}</span>
             </button>
             <button
               type="button"
@@ -96,16 +92,16 @@ export default function Navbar() {
       <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Mobile" hidden={!menuOpen}>
         {LINKS.map((l) =>
           l.hash ? (
-            <Link key={l.to} to={l.to} onClick={closeMenu}>{l.label}</Link>
+            <Link key={l.label} to={l.to} onClick={closeMenu}>{l.label}</Link>
           ) : (
-            <NavLink key={l.to} to={l.to} end={l.end} onClick={closeMenu}>
+            <NavLink key={l.label} to={l.to} end={l.end} onClick={closeMenu}>
               {l.label}
             </NavLink>
           )
         )}
-        <Link to="/menu" className="btn btn--ink mobile-menu__cta" onClick={closeMenu}>
-          Order now
-        </Link>
+        <button type="button" className="btn btn--ink mobile-menu__cta" onClick={() => { closeMenu(); open(); }}>
+          Order Now
+        </button>
       </nav>
     </>
   );

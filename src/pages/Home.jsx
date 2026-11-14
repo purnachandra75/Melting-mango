@@ -10,15 +10,16 @@ import { usePageTitle } from '../hooks/usePageTitle';
 const SPECIALS = [
   { name: 'Ice Cream Scoops', src: images.mangoScoops, alt: 'Scoops of mango ice cream' },
   { name: 'Sundaes', src: images.sundae, alt: 'An ice cream sundae' },
-  { name: 'Waffle Cones', src: images.chocolateCones, alt: 'Chocolate ice cream in waffle cones' },
-  { name: 'Parfaits', src: images.parfait, alt: 'A chocolate parfait in a glass' },
-  { name: 'Popsicles', src: images.popsicles, alt: 'Fruit popsicles' },
+  { name: 'Milkshakes', src: images.parfait, alt: 'A tall glass ice cream shake' },
+  { name: 'Faloodas', src: images.sprinkleBowl, alt: 'A colourful ice cream bowl' },
+  { name: 'Ice Cream Cakes', src: images.chocolateCones, alt: 'Chocolate ice cream cones' },
+  { name: 'Kulfi & Traditions', src: images.popsicles, alt: 'Fruit popsicles and traditional frozen treats' },
 ];
 
 const REVIEWS = [
-  { quote: 'The Mango tastes like biting into the fruit on a summer afternoon. Nothing else comes close.', name: 'Ananya R.', where: 'Regular since day one' },
-  { quote: 'Three scoops in a waffle cone — Pista, Chickoo and Chocolate. Pure, old-fashioned happiness.', name: 'Karthik S.', where: 'Flavor Passport member' },
-  { quote: 'An elegant little parlour with gracious staff. The Banana Split scoop is worth the trip alone.', name: 'Meher D.', where: 'Mango Points member' },
+  { quote: 'The Mango tastes like biting into the fruit on a summer afternoon. Nothing else comes close.', name: 'Ananya R.', where: 'Regular since day one', stars: 5 },
+  { quote: 'Three scoops in a waffle cone — Pista, Chickoo and Chocolate. Pure, old-fashioned happiness.', name: 'Karthik S.', where: 'Flavor Passport member', stars: 5 },
+  { quote: 'An elegant little parlour with gracious staff. The Banana Split scoop is worth the trip alone.', name: 'Meher D.', where: 'Mango Points member', stars: 5 },
 ];
 
 const PASSPORT = REWARDS.find((r) => r.id === 'flavor-passport');
@@ -30,6 +31,23 @@ function initials(name) {
     .map((p) => p[0])
     .join('')
     .slice(0, 2);
+}
+
+function Stars({ n = 5 }) {
+  return (
+    <span className="lp-reviews__stars" aria-label={`${n} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <svg key={i} width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill={i < n ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            strokeWidth="1.4"
+            d="M12 3.4 14.4 9l6 .8-4.4 4.2 1.1 6L12 17.2 6.9 20l1.1-6L3.6 9.8l6-.8L12 3.4Z"
+          />
+        </svg>
+      ))}
+    </span>
+  );
 }
 
 export default function Home() {
@@ -47,15 +65,15 @@ export default function Home() {
     <>
       <Hero />
 
-      <section className="lp-specials section" aria-labelledby="specials-title">
+      <section className="lp-specials section" id="gallery" aria-labelledby="specials-title">
         <div className="container">
           <Reveal className="lp-heading">
             <h2 id="specials-title" className="lp-title">Our Specialities</h2>
-            <p>Scoops, sundaes, cones and more — made fresh in our parlours every day.</p>
+            <p>A delightful range of ice creams, sundaes and more.</p>
           </Reveal>
           <ul className="lp-specials__grid">
             {SPECIALS.map((s, i) => (
-              <Reveal as="li" key={s.name} delay={i * 60}>
+              <Reveal as="li" key={s.name} delay={i * 50}>
                 <Link to="/menu" className="lp-special">
                   <span className="lp-special__media">
                     <img src={s.src} alt={s.alt} />
@@ -97,16 +115,13 @@ export default function Home() {
           </Reveal>
 
           <Reveal as="article" className="lp-offer" id="rewards" delay={120}>
+            <span className="lp-offer__ribbon">Special Offer</span>
             <div className="lp-offer__copy">
-              <p className="lp-offer__label">Mango Rewards</p>
               <h2>{PASSPORT.name}</h2>
               <p className="lp-offer__highlight">{PASSPORT.highlight}</p>
               <p>
                 Taste your way around the menu. Enrol once at the counter or online, and we’ll keep track.
               </p>
-              <Link to="/visit" className="btn btn--ink">
-                Enrol at a parlour
-              </Link>
             </div>
             <div className="lp-offer__media">
               <img
@@ -132,11 +147,16 @@ export default function Home() {
               </button>
               <blockquote>
                 <span className="lp-reviews__avatar" aria-hidden="true">{initials(current.name)}</span>
-                <p>“{current.quote}”</p>
-                <footer>
-                  <cite>{current.name}</cite>
-                  <span>{current.where}</span>
-                </footer>
+                <div className="lp-reviews__body">
+                  <p>
+                    <span className="lp-reviews__mark" aria-hidden="true">“</span>
+                    {current.quote}
+                  </p>
+                  <footer>
+                    <Stars n={current.stars} />
+                    <cite>— {current.name}</cite>
+                  </footer>
+                </div>
               </blockquote>
               <button type="button" className="lp-reviews__nav" onClick={next} aria-label="Next review">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -178,12 +198,11 @@ export default function Home() {
                   <path d="M12 8v5l3 2" />
                 </svg>
                 <span>
-                  Mon – Thu <strong>{HOURS.weekday.label}</strong>
-                  <small>Fri – Sun {HOURS.weekend.label}</small>
+                  Open Daily
+                  <small>Mon – Thu {HOURS.weekday.label} · Fri – Sun {HOURS.weekend.label}</small>
                 </span>
               </p>
               <p className="lp-visit__fine">Also in {LOCATIONS.slice(1).map((l) => `${l.name}, ${l.city}`).join(' and ')}.</p>
-              <Link to="/visit" className="btn btn--ghost">Find a parlour</Link>
             </div>
             <div className="lp-visit__photo">
               <img
