@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import FlavorCard from '../components/FlavorCard';
 import FlavorModal from '../components/FlavorModal';
 import Reveal from '../components/Reveal';
-import { AVAILABILITY, CONTAINERS, SCOOP_SIZES, flavors } from '../data/flavors';
+import { AVAILABILITY, CONTAINERS, SCOOP_SIZES } from '../data/flavors';
+import { useLiveFlavors } from '../hooks/useLiveFlavors';
 import { bgImage, images } from '../data/images';
 import { usePageTitle } from '../hooks/usePageTitle';
 
@@ -14,6 +15,7 @@ export default function Menu() {
     'Flavours',
     "Browse Melting Mango’s small-batch flavours — Mango, Chocolate, Pista, Chickoo and Banana Split. Order scoops in a waffle cone, cup or sugar cone."
   );
+  const flavors = useLiveFlavors();
   const [params, setParams] = useSearchParams();
   const active = AVAILABILITY.includes(params.get('a')) ? params.get('a') : 'All';
   const [query, setQuery] = useState('');

@@ -25,7 +25,7 @@ function todayStamp() {
   return `${n.getFullYear()}-${mm}-${dd}`;
 }
 
-const EMPTY = { name: '', email: '', phone: '', date: '', guests: '20', location: 'Jubilee Hills', message: '' };
+const EMPTY = { name: '', email: '', phone: '', date: '', guests: '20', location: 'South Jordan', message: '' };
 
 function validate(f) {
   const e = {};
@@ -50,7 +50,7 @@ function Field({ id, label, error, full, children }) {
 export default function Visit() {
   usePageTitle(
     'Visit Us',
-    'Visit Melting Mango in Jubilee Hills, Indiranagar or Bandra West. Opening hours, city-exclusive flavours, and private event enquiries.'
+    'Visit Melting Mango in South Jordan, UT. Opening hours, directions, and private event enquiries.',
   );
   const [open, setOpen] = useState(isOpenNow());
   const [form, setForm] = useState(EMPTY);
@@ -89,27 +89,44 @@ export default function Visit() {
       <header className="page-head container" style={{ '--head-img': bgImage(images.waffleBowl) }}>
         <span className="eyebrow">Visit us</span>
         <h1>Come for a <em className="accent">scoop</em></h1>
-        <p>Three parlours, one recipe book. Each one also serves a city-exclusive flavour you won’t find anywhere else.</p>
+        <p>Find us in South Jordan. Scoop in, or plan a private event with us.</p>
       </header>
 
       <section className="section" style={{ paddingTop: 0 }} aria-label="Parlour locations">
         <div className="container locations">
           {LOCATIONS.map((l, i) => (
             <Reveal as="article" className="location" key={l.name} delay={i * 100}>
-              <div className="location__map" aria-hidden="true" />
+              <div className="location__map">
+                <iframe
+                  title={`Map of Melting Mango, ${l.name}`}
+                  src={l.mapsEmbed || `https://www.google.com/maps?q=${encodeURIComponent(l.address)}&output=embed`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
               <div className="location__body">
                 <span className={`status ${open ? 'status--open' : 'status--closed'}`}>{open ? 'Open now' : 'Closed now'}</span>
                 <span className="eyebrow" style={{ display: 'flex' }}>{l.city}</span>
                 <h2 className="location__name">{l.name}</h2>
-                <address>{l.address}</address>
+                <address>
+                  <a href={l.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.address)}`} target="_blank" rel="noopener noreferrer">
+                    {l.address}
+                  </a>
+                </address>
+                {l.phone ? (
+                  <p className="location__phone">
+                    <a href={l.phoneTel || `tel:${l.phone}`}>{l.phone}</a>
+                  </p>
+                ) : null}
                 <ul className="hours">
-                  <li><span>Mon – Thu</span><strong>{HOURS.weekday.label}</strong></li>
-                  <li><span>Fri – Sun</span><strong>{HOURS.weekend.label}</strong></li>
-                  <li><span>City exclusive</span><strong>{l.exclusive}</strong></li>
+                  <li><span>Mon - Thu</span><strong>{HOURS.weekday.label}</strong></li>
+                  <li><span>Fri - Sun</span><strong>{HOURS.weekend.label}</strong></li>
+                  {l.exclusive ? <li><span>City exclusive</span><strong>{l.exclusive}</strong></li> : null}
                 </ul>
                 <a
                   className="location__directions"
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.address)}`}
+                  href={l.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import Scoop from '../Scoop';
-import { CONTAINERS, SCOOP_SIZES, flavorById, flavors, formatPrice } from '../../data/flavors';
+import { CONTAINERS, SCOOP_SIZES, flavorById, formatPrice } from '../../data/flavors';
+import { useLiveFlavors } from '../../hooks/useLiveFlavors';
 import { useCart } from '../../context/CartContext';
 
 const NUMERALS = ['I', 'II', 'III'];
 
 export default function ScoopBuilder() {
   const { addItem } = useCart();
+  const flavors = useLiveFlavors();
   const [count, setCount] = useState(2);
   const [slots, setSlots] = useState(['mango', 'pista', 'chocolate']);
   const [containerId, setContainerId] = useState('waffle');

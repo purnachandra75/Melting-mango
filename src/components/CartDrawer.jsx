@@ -4,10 +4,15 @@ import Scoop from './Scoop';
 import { formatPrice } from '../data/flavors';
 import { useCart } from '../context/CartContext';
 import { useDialog } from '../hooks/useDialog';
+import { createOrder } from '../lib/restaurantApi';
 
 export default function CartDrawer() {
   const { items, subtotal, isOpen, close, updateQty, removeItem, clear } = useCart();
   const [placed, setPlaced] = useState(null);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
   const dialogRef = useDialog(isOpen, close);
 
   useEffect(() => {
@@ -16,9 +21,31 @@ export default function CartDrawer() {
 
   if (!isOpen) return null;
 
-  const checkout = () => {
-    setPlaced({ id: `MM-${Math.floor(1000 + Math.random() * 9000)}`, total: subtotal });
-    clear();
+  const checkout = async () => {
+    if (!name.trim() || !phone.trim()) {
+      setError('Add your name and phone so the parlour can call the order.');
+      return;
+    }
+    setBusy(true);
+    setError('');
+    try {
+      const order = await createOrder({
+        customerName: name.trim(),
+        customerPhone: phone.trim(),
+        notes: 'Pickup from the Melting Mango website',
+        lineItems: items.map((item) => ({
+          name: `${item.name} · ${item.size.label} · ${item.container.label}`,
+          qty: item.qty,
+          price: item.unit,
+        })),
+      });
+      setPlaced({ id: order.code || order.orderId, total: order.total ?? subtotal });
+      clear();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not place the order.');
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -88,8 +115,19 @@ export default function CartDrawer() {
             </div>
             <div className="drawer__foot">
               <div className="drawer__row drawer__row--total"><span>Total</span><span>{formatPrice(subtotal)}</span></div>
+              <label className="drawer__field">
+                Name
+                <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+              </label>
+              <label className="drawer__field">
+                Phone
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" inputMode="tel" />
+              </label>
+              {error ? <p className="drawer__fine" role="alert">{error}</p> : null}
               <p className="drawer__fine">Rewards are applied at the counter — one free scoop reward per transaction.</p>
-              <button type="button" className="btn btn--mango btn--block" onClick={checkout}>Checkout for pickup</button>
+              <button type="button" className="btn btn--mango btn--block" onClick={checkout} disabled={busy}>
+                {busy ? 'Placing order…' : 'Checkout for pickup'}
+              </button>
             </div>
           </>
         )}

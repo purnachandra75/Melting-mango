@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
+import { connectLiveMenu } from './lib/restaurantApi';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import OrderFab from './components/OrderFab';
-import Preloader from './components/Preloader';
+import OrderChatWidget from './components/OrderChatWidget';
+import { useLiveMenu } from './hooks/useLiveMenu';
 import { useCart } from './context/CartContext';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
@@ -38,12 +40,16 @@ function Toast() {
 }
 
 export default function App() {
+  const { notify } = useCart();
+  const { dishes, menuConfig, restaurantName } = useLiveMenu();
+  useEffect(() => {
+    connectLiveMenu().catch(() => {});
+  }, []);
   return (
     <>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <Preloader />
       <ScrollToTop />
       <Navbar />
       <main id="main-content" tabIndex={-1}>
@@ -57,6 +63,13 @@ export default function App() {
       </main>
       <Footer />
       <OrderFab />
+      <OrderChatWidget
+        dishes={dishes}
+        menuConfig={menuConfig}
+        restaurantName={restaurantName}
+        onOrderPlaced={(msg) => notify(msg)}
+        onError={(msg) => notify(msg)}
+      />
       <CartDrawer />
       <Toast />
     </>

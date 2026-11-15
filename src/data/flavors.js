@@ -166,5 +166,30 @@ export const REWARDS = [
 export const formatPrice = (n) =>
   `${CURRENCY}${Number.isInteger(n) ? n : n.toFixed(2)}`;
 
-export const flavorById = (id) => flavors.find((f) => f.id === id);
+const priceOverrides = new Map();
+const catalogListeners = new Set();
+
+/** Overlay Restaurant Admin menu prices onto the local scoop catalog. */
+export function setMenuPriceOverrides(entries) {
+  priceOverrides.clear();
+  for (const [id, patch] of entries) priceOverrides.set(id, patch);
+  catalogListeners.forEach((fn) => fn());
+}
+
+export function subscribeCatalog(fn) {
+  catalogListeners.add(fn);
+  return () => catalogListeners.delete(fn);
+}
+
+export function flavorById(id) {
+  const base = flavors.find((f) => f.id === id);
+  if (!base) return undefined;
+  const patch = priceOverrides.get(id);
+  return patch ? { ...base, ...patch } : base;
+}
+
+export function catalogFlavors() {
+  return flavors.map((f) => flavorById(f.id));
+}
+
 export const containerById = (id) => CONTAINERS.find((c) => c.id === id);

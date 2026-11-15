@@ -59,9 +59,114 @@
         ]
       }
     </script>
+      <style>
+      #mm-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 100000;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 42%, #FFF8EC 0%, #FFE7C4 48%, #FFD08A 100%);
+        transition: opacity .45s ease, visibility .45s ease;
+      }
+      #mm-loader.is-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #mm-loader .mm-loader__mark {
+        position: relative;
+        width: 168px;
+        height: 168px;
+        display: grid;
+        place-items: center;
+      }
+      #mm-loader .mm-loader__ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 3px solid rgba(232, 120, 14, .16);
+        border-top-color: #E8780E;
+        animation: mm-loader-spin 1s linear infinite;
+      }
+      #mm-loader .mm-loader__logo {
+        width: 118px;
+        height: 118px;
+        object-fit: contain;
+        border-radius: 50%;
+        animation: mm-loader-pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes mm-loader-spin { to { transform: rotate(360deg); } }
+      @keyframes mm-loader-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #mm-loader { transition: opacity .2s linear; }
+        #mm-loader .mm-loader__ring,
+        #mm-loader .mm-loader__logo { animation: none; }
+      }
+    </style>
   </head>
   <body>
+    <div id="mm-loader" role="status" aria-live="polite" aria-label="Loading Melting Mango">
+      <div class="mm-loader__mark">
+        <span class="mm-loader__ring" aria-hidden="true"></span>
+        <picture>
+          <source srcset="/images/melting-logo.webp" type="image/webp" />
+          <img class="mm-loader__logo" src="/images/melting-logo.png" width="118" height="118" alt="" />
+        </picture>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      (function () {
+        var MIN_MS = 600;
+        var MAX_MS = 4000;
+        var FADE_MS = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 220 : 480;
+        var started = Date.now();
+        var windowLoaded = false;
+        var heroReady = false;
+        var hidden = false;
+        var el = document.getElementById('mm-loader');
+        var heroSrc = '/images/hero-mango-bowl-cut.webp';
+
+        function hide() {
+          if (hidden) return;
+          hidden = true;
+          if (!el) return;
+          el.classList.add('is-done');
+          window.setTimeout(function () {
+            if (el && el.parentNode) el.parentNode.removeChild(el);
+          }, FADE_MS);
+        }
+
+        function maybeHide() {
+          if (!(windowLoaded && heroReady) || hidden) return;
+          var wait = Math.max(0, MIN_MS - (Date.now() - started));
+          window.setTimeout(hide, wait);
+        }
+
+        function markHeroReady() {
+          heroReady = true;
+          maybeHide();
+        }
+
+        window.addEventListener('load', function () {
+          windowLoaded = true;
+          maybeHide();
+        });
+
+        var hero = new Image();
+        hero.onload = markHeroReady;
+        hero.onerror = markHeroReady;
+        hero.src = heroSrc;
+        if (hero.complete) markHeroReady();
+
+        window.setTimeout(hide, MAX_MS);
+      })();
+    </script>
+
   </body>
 </html>

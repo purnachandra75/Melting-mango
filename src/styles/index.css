@@ -741,16 +741,18 @@ em.accent {
 .value p { color: var(--slate); font-size: 0.94rem; }
 
 /* ---------- Visit ---------- */
-.locations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.locations { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; max-width: 720px; }
 .location { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--mist); }
 .location__map {
-  height: 170px;
+  height: 220px;
   background:
     linear-gradient(90deg, var(--mist) 1px, transparent 1px) 0 0 / 28px 28px,
     linear-gradient(var(--mist) 1px, transparent 1px) 0 0 / 28px 28px,
     var(--fog);
   position: relative;
 }
+.location__map iframe { width: 100%; height: 100%; border: 0; display: block; }
+.location__map:has(iframe)::after { display: none; }
 .location__map::after {
   content: '';
   position: absolute;
@@ -959,3 +961,6 @@ em.accent {
     height: 84px;
   }
 }
+
+.location__phone { display: block; margin: -8px 0 16px; }
+.location__phone a { color: inherit; font-weight: 600; }

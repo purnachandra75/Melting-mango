@@ -4,3 +4,5 @@ dist
 *.log
 source-images
 screenshots
+.env.local
+.env.*.local

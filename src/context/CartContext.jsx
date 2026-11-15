@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { SCOOP_SIZES, containerById, flavorById } from '../data/flavors';
+import { SCOOP_SIZES, containerById, flavorById, subscribeCatalog } from '../data/flavors';
 
 const CartContext = createContext(null);
 const STORAGE_KEY = 'melting-mango-cart-v2';
@@ -63,6 +63,7 @@ export function CartProvider({ children }) {
   }, []);
 
   const [items, setItems] = useState(loadCart);
+  const [catalogVersion, setCatalogVersion] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const toastTimer = useRef();
@@ -76,6 +77,7 @@ export function CartProvider({ children }) {
   }, [items]);
 
   useEffect(() => () => clearTimeout(toastTimer.current), []);
+  useEffect(() => subscribeCatalog(() => setCatalogVersion((version) => version + 1)), []);
 
   const notify = useCallback((message) => {
     clearTimeout(toastTimer.current);
@@ -116,7 +118,7 @@ export function CartProvider({ children }) {
         const unit = lineFlavors.reduce((sum, f) => sum + f.price, 0);
         return { ...i, flavors: lineFlavors, size, container, name: describeLine(i.flavorIds), unit, total: unit * i.qty };
       }),
-    [items]
+    [items, catalogVersion]
   );
 
   const count = items.reduce((n, i) => n + i.qty, 0);

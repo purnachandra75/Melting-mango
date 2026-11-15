@@ -4,7 +4,7 @@ import Reveal from '../components/Reveal';
 import { Clip } from '../components/ClipArt';
 import { images } from '../data/images';
 import { REWARDS } from '../data/flavors';
-import { FLAGSHIP, HOURS, LOCATIONS } from '../data/locations';
+import { CONTACT, FLAGSHIP, HOURS, mapsSearchUrl } from '../data/locations';
 import { usePageTitle } from '../hooks/usePageTitle';
 
 const SPECIALS = [
@@ -39,7 +39,7 @@ function Head({ kicker, title, id }) {
 export default function Home() {
   usePageTitle(
     'Artisan Ice Cream',
-    'Melting Mango — small-batch, slow-churned artisan ice cream made every morning with ripe fruit, real cream and nothing artificial. Parlours in Hyderabad, Bengaluru and Mumbai.'
+    'Melting Mango - small-batch, slow-churned artisan ice cream in South Jordan, UT. Ripe fruit, real cream, and nothing artificial.',
   );
 
   return (
@@ -72,11 +72,9 @@ export default function Home() {
           </Reveal>
           <Reveal className="r2-about__copy" delay={80}>
             <p className="r2-kicker r2-kicker--left">About Our Parlour</p>
-            <h2 id="about-title" className="r2-h2">A Grandmother’s Summer, Bottled.</h2>
+            <h2 id="about-title" className="r2-h2">Real Alphonso Mangoes, Churned Fresh Daily.</h2>
             <p>
-              Every summer, our founder’s grandmother would turn the season’s best Alphonsos into a
-              hand-churned ice cream so smooth it disappeared before it could melt. Melting Mango began
-              as an attempt to bottle that feeling.
+              We handcraft our ice cream in small batches from real Alphonso mangoes, slow-churned until it is bright, lush and smooth. Each batch is made fresh, so every scoop tastes like the fruit at its best.
             </p>
             <p>
               Ten years on we still churn in small batches, still hand-pulp every mango, and still taste
@@ -145,18 +143,18 @@ export default function Home() {
             <ul className="r2-visit__list">
               <li>
                 <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" /><circle cx="12" cy="10" r="2.3" /></svg></span>
-                <span><strong>{FLAGSHIP.name}, {FLAGSHIP.city}</strong><small>{FLAGSHIP.address}</small></span>
+                <span><strong>{FLAGSHIP.name}, {FLAGSHIP.city}</strong><small><a href={mapsSearchUrl(FLAGSHIP.address)} target="_blank" rel="noopener noreferrer">{FLAGSHIP.address}</a></small></span>
               </li>
               <li>
                 <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><path d="M12 8v5l3 2" /></svg></span>
                 <span><strong>Opening Hours</strong><small>Mon – Thu {HOURS.weekday.label}<br />Fri – Sun {HOURS.weekend.label}</small></span>
               </li>
               <li>
-                <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11" /><path d="M9 20v-6h6v6" /></svg></span>
-                <span><strong>Also In</strong><small>{LOCATIONS.slice(1).map((l) => `${l.name}, ${l.city}`).join(' · ')}</small></span>
+                <span className="r2-visit__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.5a16 16 0 0 0 6.4 6.4l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z" /></svg></span>
+                <span><strong>Phone</strong><small><a href={CONTACT.phoneTel}>{CONTACT.phone}</a></small></span>
               </li>
             </ul>
-            <Link to="/visit" className="r2-btn r2-btn--solid">All Parlours <Arrow /></Link>
+            <Link to="/visit" className="r2-btn r2-btn--solid">Visit us <Arrow /></Link>
           </Reveal>
           <Reveal className="r2-visit__photo" delay={80}>
             <img src={images.parlourDisplay} alt="A gelato display case with tubs of ice cream behind the parlour window" width="1150" height="650" />
