@@ -1128,3 +1128,26 @@ h1, h2, h3, h4,
   .footer.r2-footer .r2-footer__bar { padding-bottom: 110px; }
   .footer.r2-footer .r2-footer__bar-in { flex-direction: column; align-items: flex-start; padding-right: 0; }
 }
+
+/* Loyalty earn-points: green pill, distinct from gold/brown labels */
+.earn-tag,
+.chat-dish-earn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #e8f5ee;
+  border: 1px solid rgba(31, 122, 77, 0.28);
+  color: #1f7a4d;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.earn-tag svg,
+.chat-dish-earn svg { flex: none; color: #1f7a4d; stroke-width: 2; }
+.earn-tag--modal { margin-top: 8px; justify-content: flex-end; }
+.chat-dish-earn { margin-top: 4px; }
+

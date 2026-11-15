@@ -227,3 +227,27 @@
 @media (prefers-reduced-motion: reduce) {
   .chat-fab, .chat-mic.is-live, .chat-spin { animation: none; }
 }
+
+/* ── Pickup token in chat confirmation ── */
+.chat-token {
+  display: inline-grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 8px 18px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  border: 2px dashed var(--mango);
+  background: #fff8f0;
+}
+.chat-token small {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mango-deep);
+}
+.chat-token strong {
+  font-size: 28px;
+  line-height: 1;
+  color: var(--mango-deep);
+}

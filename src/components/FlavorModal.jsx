@@ -3,6 +3,8 @@ import Scoop from './Scoop';
 import { CONTAINERS, SCOOP_SIZES, formatPrice } from '../data/flavors';
 import { useCart } from '../context/CartContext';
 import { useDialog } from '../hooks/useDialog';
+import { useMenuConfig } from '../context/MenuConfigContext';
+import { pointsForPrice } from '../lib/loyalty';
 
 function cycle(list, current, key, getId) {
   if (key !== 'ArrowRight' && key !== 'ArrowDown' && key !== 'ArrowLeft' && key !== 'ArrowUp') return null;
@@ -16,6 +18,7 @@ function cycle(list, current, key, getId) {
 
 export default function FlavorModal({ flavor, onClose }) {
   const { addItem } = useCart();
+  const menuConfig = useMenuConfig();
   const [count, setCount] = useState(1);
   const [containerId, setContainerId] = useState(flavor.vessel);
   const [qty, setQty] = useState(1);
@@ -125,6 +128,15 @@ export default function FlavorModal({ flavor, onClose }) {
             <button type="button" className="btn btn--primary" onClick={handleAdd}>
               Add to bag · {formatPrice(total)}
             </button>
+            {pointsForPrice(total, menuConfig) != null ? (
+              <span className="earn-tag earn-tag--modal">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.432 0l6.568-6.568a2.426 2.426 0 0 0 0-3.432z" />
+                  <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                </svg>
+                {`Earn ${pointsForPrice(total, menuConfig)} Points`}
+              </span>
+            ) : null}
           </div>
         </div>
       </div>

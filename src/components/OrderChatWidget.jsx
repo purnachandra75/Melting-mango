@@ -6,6 +6,7 @@ import {
   STEPS,
 } from '../lib/chatOrderFlow';
 import { createOrder } from '../lib/restaurantApi';
+import { earnPointsLabel } from '../lib/loyalty';
 
 function Icon({ children, size = 16 }) {
   return (
@@ -126,8 +127,8 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
   };
   const listRef = useRef(null);
 
-  const pushAssistant = (text, actions = [], listStyle) => {
-    setMessages((prev) => [...prev, { role: 'assistant', text, actions, listStyle }]);
+  const pushAssistant = (text, actions = [], listStyle, token) => {
+    setMessages((prev) => [...prev, { role: 'assistant', text, actions, listStyle, token }]);
     if (voiceOutRef.current) speak(text);
   };
 
@@ -143,7 +144,7 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
       let mapped = text;
       if (text === 'order' || /^start order$/i.test(text)) mapped = 'order';
       else if (text === 'menu' || /^show menu$/i.test(text)) mapped = 'menu';
-      else if (/^(dish|cat|protein|style|qty|spice|size):/i.test(text)) mapped = text;
+      else if (/^(dish|cat|protein|style|qty|spice|type|size):/i.test(text)) mapped = text;
       else if (text === 'more:no' || /^checkout$/i.test(text)) mapped = 'checkout';
       else if (text === 'confirm:yes' || /^place order$/i.test(text)) mapped = 'place order';
       else if (text === 'cancel' || /^cancel$/i.test(text)) mapped = 'cancel';
@@ -160,13 +161,17 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
         const done = createEmptySession();
         done.step = STEPS.COMPLETE;
         setSession(done);
-        const confirm = code
-          ? `Order placed · ${code}. You’ll see it in Restaurant Admin → Orders.`
-          : 'Order placed. Check Restaurant Admin → Orders.';
+        const token = order.tokenLabel || '';
+        const kind = order.orderType || payload.orderType || '';
+        const confirm = [
+          code ? `Order placed · ${code}.` : 'Order placed.',
+          token ? `Your ${kind ? kind.toLowerCase() : 'pickup'} token is ${token}. Show it at the counter when you collect your order.` : '',
+          !token && kind === 'Delivery' ? 'We’ll call you if we need anything for the delivery.' : '',
+        ].filter(Boolean).join(' ');
         pushAssistant(confirm, [
           { id: 'order', label: 'Order again' },
           { id: 'menu', label: 'Show menu' },
-        ]);
+        ], undefined, token || undefined);
         onOrderPlaced?.(confirm);
       } else {
         pushAssistant(result.reply, result.actions || [], result.listStyle);
@@ -232,6 +237,12 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
           <div className="chat-messages" ref={listRef}>
             {messages.map((msg, i) => (
               <div key={`${msg.role}-${i}`} className={`chat-bubble ${msg.role}`}>
+                {msg.token ? (
+                  <div className="chat-token" aria-label={`Token ${msg.token}`}>
+                    <small>Your token</small>
+                    <strong>{msg.token}</strong>
+                  </div>
+                ) : null}
                 <p>{msg.text}</p>
                 {msg.actions?.length > 0 && (
                   <div className={msg.listStyle === 'dishes' ? 'chat-dish-list' : 'chat-actions'}>
@@ -250,7 +261,18 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
                           {showVeg && action.veg === true ? <span className="chat-veg">Veg</span> : null}
                         </span>
                         {action.price != null && action.price !== '' ? (
-                          <span className="chat-dish-price">${action.price}</span>
+                          <span className="chat-dish-price">
+                            ${action.price}
+                            {earnPointsLabel(action.price, menuConfig) ? (
+                              <span className="chat-dish-earn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.432 0l6.568-6.568a2.426 2.426 0 0 0 0-3.432z" />
+                                  <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                                </svg>
+                                {earnPointsLabel(action.price, menuConfig)}
+                              </span>
+                            ) : null}
+                          </span>
                         ) : null}
                       </button>
                     ))}

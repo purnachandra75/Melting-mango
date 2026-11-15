@@ -7,6 +7,7 @@ import CartDrawer from './components/CartDrawer';
 import OrderFab from './components/OrderFab';
 import OrderChatWidget from './components/OrderChatWidget';
 import { useLiveMenu } from './hooks/useLiveMenu';
+import { MenuConfigContext } from './context/MenuConfigContext';
 import { useCart } from './context/CartContext';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
@@ -46,7 +47,7 @@ export default function App() {
     connectLiveMenu().catch(() => {});
   }, []);
   return (
-    <>
+    <MenuConfigContext.Provider value={menuConfig}>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
@@ -72,6 +73,6 @@ export default function App() {
       />
       <CartDrawer />
       <Toast />
-    </>
+    </MenuConfigContext.Provider>
   );
 }
