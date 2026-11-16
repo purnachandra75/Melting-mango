@@ -1,3 +1,4 @@
+import { SpaBody } from '../components/SideDecor';
 import { useEffect, useState } from 'react';
 import Reveal from '../components/Reveal';
 import { bgImage, images } from '../data/images';
@@ -85,14 +86,14 @@ export default function Visit() {
   });
 
   return (
-    <>
+    <SpaBody compact>
       <header className="page-head container" style={{ '--head-img': bgImage(images.waffleBowl) }}>
         <span className="eyebrow">Visit us</span>
         <h1>Come for a <em className="accent">scoop</em></h1>
         <p>Find us in South Jordan. Scoop in, or plan a private event with us.</p>
       </header>
 
-      <section className="section" style={{ paddingTop: 0 }} aria-label="Parlour locations">
+      <section className="section section--cream" style={{ paddingTop: 0 }} aria-label="Parlour locations">
         <div className="container locations">
           {LOCATIONS.map((l, i) => (
             <Reveal as="article" className="location" key={l.name} delay={i * 100}>
@@ -198,6 +199,6 @@ export default function Visit() {
           </Reveal>
         </div>
       </section>
-    </>
+    </SpaBody>
   );
 }

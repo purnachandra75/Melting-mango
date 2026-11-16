@@ -41,23 +41,31 @@ body {
 .r2-btn--line:hover { background: var(--r-brown); color: #fff; }
 .r2-btn--white { background: #fff; color: var(--r-or-3); box-shadow: 0 12px 26px -14px rgba(59,35,20,.5); white-space: nowrap; }
 
-/* ---------- Header uses same GIF as page background ---------- */
+/* ---------- Header: transparent over the home hero, solid elsewhere ---------- */
 .nav,
-.nav.nav--scrolled,
-header.nav,
-header.nav.nav--scrolled {
-  background-color: var(--r-bg-image) !important;
-  background-image: var(--r-bg-gif) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: center top !important;
+header.nav {
+  padding: 6px 0;
+  border-bottom: 0;
+  box-shadow: none;
+  transition: background-color .3s ease, backdrop-filter .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.nav.nav--over-hero,
+header.nav.nav--over-hero {
+  background-color: transparent !important;
+  background-image: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(199, 120, 18, .12);
+  border-bottom: 0;
+  box-shadow: none;
 }
-.nav--scrolled {
-  box-shadow: 0 8px 22px -18px rgba(199, 120, 18, .35);
+.nav.nav--scrolled,
+header.nav.nav--scrolled {
+  background-color: rgba(255, 247, 230, .88) !important;
+  background-image: none !important;
+  backdrop-filter: blur(16px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.15) !important;
+  border-bottom: 1px solid rgba(199, 120, 18, .12);
+  box-shadow: 0 10px 24px -18px rgba(59, 35, 20, .35);
 }
 .nav__leaves { position: absolute; left: 0; top: 0; width: 120px; height: 90px; pointer-events: none; z-index: 0; opacity: .95; }
 .nav__inner { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; }
@@ -895,16 +903,24 @@ header.nav.nav--scrolled {
 .r2-wave-line { display: none; }
 .r2-hero::after { content: none; }
 
-/* Keep header matched to background GIF (wins over index/copy/yellow) */
-.nav,
+/* Keep overlay / solid-bar rules winning over index/copy/yellow */
+.nav.nav--over-hero,
+header.nav.nav--over-hero {
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 0;
+  box-shadow: none;
+}
 .nav.nav--scrolled,
-header.nav,
 header.nav.nav--scrolled {
-  background-color: var(--r-bg-image) !important;
-  background-image: var(--r-bg-gif) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: center top !important;
+  background-color: rgba(255, 247, 230, .88) !important;
+  background-image: none !important;
+  backdrop-filter: blur(16px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.15) !important;
+  border-bottom: 1px solid rgba(199, 120, 18, .12);
+  box-shadow: 0 10px 24px -18px rgba(59, 35, 20, .35);
 }
 .r2-hero__ref { width: 124%; max-width: 760px; margin: -10px -6% 0 -8%; filter: drop-shadow(0 22px 22px rgba(140, 70, 10, .22)); }
 .r2-features { border-top: 0; }
@@ -1186,3 +1202,55 @@ h1, h2, h3, h4,
 .earn-tag--modal { margin-top: 8px; justify-content: flex-end; }
 .chat-dish-earn { margin-top: 4px; }
 
+
+/* ---------- Bigger navbar logo (hangs slightly below the bar over the hero) ---------- */
+header.nav .brand { flex-shrink: 0; width: auto !important; height: auto !important; display: block; }
+header.nav .brand__logo {
+  width: 118px !important; height: 118px !important; max-width: none;
+  margin: -4px 0 -30px; position: relative; z-index: 2;
+  transition: width .3s ease, height .3s ease, margin .3s ease;
+}
+header.nav.nav--scrolled .brand__logo { width: 92px !important; height: 92px !important; margin: -4px 0 -4px; }
+@media (max-width: 640px) {
+  header.nav .brand__logo { width: 76px !important; height: 76px !important; margin: -2px 0 -22px; }
+  header.nav.nav--scrolled .brand__logo { width: 62px !important; height: 62px !important; margin: -2px 0 -8px; }
+}
+/* keep the logo column fixed so links don't jump when the logo shrinks on scroll */
+header.nav .brand { width: 118px !important; }
+@media (max-width: 640px) { header.nav .brand { width: 76px !important; } }
+
+/* ---------- Hero: close the empty band under the bowl (image has ~15% transparent space at the bottom) ---------- */
+@media (min-width: 961px) {
+  .r2-hero__grid { padding-bottom: 8px; }
+}
+@media (max-width: 960px) {
+  .r2-hero__ref { margin-bottom: -48px; }
+}
+@media (max-width: 960px) { .r2-badge { translate: 0 48px; } } /* keep badge where it sat on the bowl */
+
+/* ---------- Hero: show the WHOLE background image on desktop (no cover-crop) ----------
+   hero-ice-bg.gif is 720x358, so the hero takes that aspect ratio and the image is drawn at 100% x 100%.
+   Bowl sits on the marble floor (base at ~80% of the hero height, just above the wave). */
+@media (min-width: 1181px) {
+  .r2-hero {
+    aspect-ratio: 720 / 358; min-height: 0; padding: 96px 0 0;
+    display: flex; flex-direction: column;
+    background:
+      linear-gradient(105deg, rgba(255, 241, 210, .6) 0%, rgba(255, 241, 210, .38) 30%, transparent 52%), /* lighter wash so leaves / left scoop show */
+      url('/images/hero-ice-bg.gif') center top / 100% 100% no-repeat,
+      var(--r-cream);
+  }
+  .r2-hero > .container { width: 100%; flex: 0 0 auto; }
+  .r2-hero > .r2-hero__grid { flex: 1 1 auto; min-height: 0; padding-bottom: 0; }
+  .r2-hero__art { position: relative; align-self: stretch; min-height: 0; }
+  .r2-hero__ref {
+    position: absolute; left: 50%; width: 32vw; max-width: none; height: auto; margin: 0;
+    /* base of the bowl (~85% down the image) lands at 80% of the hero height */
+    bottom: calc(4.48vw - 98px);
+    transform: translateX(-50%);
+  }
+  .r2-badge { margin-bottom: 0; transform: rotate(-4deg); }
+}
+@media (max-width: 960px) {
+  .r2-hero { background-position: 0 0, center bottom, 0 0; }
+}

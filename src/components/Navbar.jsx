@@ -46,7 +46,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={`nav ${scrolled || menuOpen ? 'nav--scrolled' : ''}`}>
+      <header className={`nav ${pathname === '/' && !scrolled && !menuOpen ? 'nav--over-hero' : 'nav--scrolled'}`}>
         <div className="container nav__inner">
           <Logo onClick={closeMenu} />
           <nav aria-label="Primary">

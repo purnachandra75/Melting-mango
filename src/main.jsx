@@ -9,6 +9,8 @@ import './styles/hero.css';
 import './styles/copy.css';
 import './styles/yellow.css';
 import './styles/ref2.css';
+import './styles/side-decor.css';
+import './styles/footer.css';
 import './styles/chat.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

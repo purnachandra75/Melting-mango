@@ -44,13 +44,16 @@ export default function Hero() {
         </div>
 
         <figure className="r2-hero__art">
+          <span className="r2-hero__ref r2-bowl">
           <img
-            className="r2-hero__ref"
+            className="r2-bowl__img"
             src={images.heroBowlCut}
+            srcSet={`${images.heroBowlCut} 1x, ${images.heroBowlCut2x} 2x`}
             alt="A speckled ceramic bowl piled with mango ice cream scoops, mango sauce, mango cubes and leaves"
             width="477"
             height="539"
           />
+          </span>
         </figure>
 
         <div className="r2-badge" aria-label="Made with real Alphonso mangoes">

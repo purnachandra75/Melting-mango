@@ -1,3 +1,4 @@
+import { SpaBody } from '../components/SideDecor';
 import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import FlavorCard from '../components/FlavorCard';
@@ -35,7 +36,7 @@ export default function Menu() {
   }, [flavors, active, query]);
 
   return (
-    <>
+    <SpaBody compact>
       <header className="page-head container" style={{ '--head-img': bgImage(images.mangoScoops) }}>
         <span className="eyebrow">The menu</span>
         <h1>Today’s <em className="accent">flavours</em></h1>
@@ -102,6 +103,6 @@ export default function Menu() {
       </section>
 
       {selected && <FlavorModal flavor={selected} onClose={closeModal} />}
-    </>
+    </SpaBody>
   );
 }

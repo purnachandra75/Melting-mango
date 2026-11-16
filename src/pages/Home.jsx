@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Hero from '../components/landing/Hero';
 import Reveal from '../components/Reveal';
+import { SpaBody } from '../components/SideDecor';
 import { Clip } from '../components/ClipArt';
 import { images } from '../data/images';
 import { REWARDS } from '../data/flavors';
@@ -17,9 +18,15 @@ const SPECIALS = [
 ];
 
 const REVIEWS = [
-  { quote: 'The Mango tastes like biting into the fruit on a summer afternoon. Nothing else comes close.', name: 'Ananya R.', where: 'Regular since day one' },
-  { quote: 'Three scoops in a waffle cone — Pista, Chickoo and Chocolate. Pure, old-fashioned happiness.', name: 'Karthik S.', where: 'Flavor Passport member' },
-  { quote: 'An elegant little parlour with gracious staff. The Banana Split scoop is worth the trip alone.', name: 'Meher D.', where: 'Mango Points member' },
+  { quote: "The Mango tastes like biting into the fruit on a summer afternoon. Nothing else comes close.", name: 'Ananya R.', where: 'Regular since day one' },
+  { quote: "Three scoops in a waffle cone — Pista, Chickoo and Chocolate. Pure, old-fashioned happiness.", name: 'Karthik S.', where: 'Flavor Passport member' },
+  { quote: "An elegant little parlour with gracious staff. The Banana Split scoop is worth the trip alone.", name: 'Meher D.', where: 'Mango Points member' },
+  { quote: "Creamy, not too sweet, and you can actually taste real fruit. My kids ask for it every weekend.", name: 'Priya K.', where: 'Weekend family visits' },
+  { quote: "The chocolate is rich and silky. I came for one scoop and left with a tub for home.", name: 'Rahul M.', where: 'First-time visitor' },
+  { quote: "Ordered for a birthday party and every single cup was gone in minutes. Fresh and lovely.", name: 'Sneha P.', where: 'Party order' },
+  { quote: "Pista with real nuts in every bite. Easily the best ice cream I have had in years.", name: 'Arjun V.', where: 'Pista loyalist' },
+  { quote: "Friendly staff who let you taste before you choose. The seasonal mango is a must-try.", name: 'Divya N.', where: 'Seasonal fan' },
+  { quote: "Cosy spot for a late-night treat. Chickoo scoop is my new favourite comfort food.", name: 'Vikram T.', where: 'Night-owl regular' },
 ];
 
 const PASSPORT = REWARDS.find((r) => r.id === 'flavor-passport');
@@ -45,6 +52,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <SpaBody>
 
       <section className="r2-section r2-specials" id="gallery" aria-labelledby="specials-title">
         <div className="container">
@@ -117,20 +125,22 @@ export default function Home() {
       <section className="r2-section r2-reviews" aria-labelledby="reviews-title">
         <div className="container">
           <Head kicker="Kind Words" title="What Our Guests Say" id="reviews-title" />
-          <ul className="r2-quotes">
-            {REVIEWS.map((r, i) => (
-              <Reveal as="li" key={r.name} delay={i * 80}>
-                <figure className={`r2-quote${i === 1 ? ' is-featured' : ''}`}>
-                  <span className="r2-quote__mark" aria-hidden="true">“</span>
-                  <blockquote>{r.quote}</blockquote>
-                  <figcaption>
-                    <span className="r2-quote__av" aria-hidden="true">{initials(r.name)}</span>
-                    <span><strong>{r.name}</strong><small>{r.where}</small></span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </ul>
+          <Reveal className="kw-marquee">
+            <ul className="kw-track" aria-label="Guest reviews">
+              {[...REVIEWS, ...REVIEWS].map((r, i) => (
+                <li key={`${r.name}-${i}`} className={`kw-card kw-c${(i % REVIEWS.length) % 4}`} aria-hidden={i >= REVIEWS.length || undefined}>
+                  <figure>
+                    <span className="kw-card__mark" aria-hidden="true">{'\u201C'}</span>
+                    <blockquote>{r.quote}</blockquote>
+                    <figcaption>
+                      <span className="kw-card__av" aria-hidden="true">{initials(r.name)}</span>
+                      <span><strong>{r.name}</strong><small>{r.where}</small></span>
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </section>
 
@@ -161,6 +171,7 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+      </SpaBody>
     </>
   );
 }
