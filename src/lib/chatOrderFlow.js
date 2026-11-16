@@ -110,7 +110,8 @@ function sizeActions(sizes) {
   return (sizes || []).map((item) => ({
     id: `size:${item.id || item.name}`,
     label: item.name,
-    price: Number(item.priceValue || item.price || 0).toFixed(2),
+    // Containers are usually $0 add-ons: hide a zero price on the size chips.
+    price: Number(item.priceValue || item.price || 0) > 0 ? Number(item.priceValue || item.price).toFixed(2) : undefined,
     image: item.image || '',
   }));
 }
@@ -185,10 +186,16 @@ function searchWords(text) {
     .filter((w) => w.length > 2 && !SEARCH_STOP.has(w));
 }
 
+/**
+ * Containers (Cup / Sugar Cone / Waffle Cone) are not products: they are only the size step.
+ * Keep them out of the browsable menu, categories and search; return them separately as sizes.
+ */
 export function prepareChatMenu(dishes) {
-  const items = groupMenuDishes(dishes || []);
+  const all = groupMenuDishes(dishes || []);
+  const sizes = all.filter(isContainerItem);
+  const items = all.filter((d) => !isContainerItem(d));
   const categories = sortCategories(items.map((d) => d.category).filter(Boolean));
-  return { items, categories };
+  return { items, categories, sizes };
 }
 
 function categoriesFrom(catalog) {
@@ -604,7 +611,7 @@ function beginGroup(session, group, protein, style) {
   return afterVariantChosen(session);
 }
 
-function beginRegular(session, dish, { confirmFirst = true, catalog = [] } = {}) {
+function beginRegular(session, dish, { confirmFirst = true, catalog = [], sizes } = {}) {
   session.pendingGroup = null;
   session.pendingProtein = '';
   session.pendingStyle = '';
@@ -631,12 +638,11 @@ function beginRegular(session, dish, { confirmFirst = true, catalog = [] } = {})
       ],
     };
   }
-  return continueAfterItem(session, catalog);
+  return continueAfterItem(session, catalog, sizes);
 }
 
-function continueAfterItem(session, catalog) {
+function continueAfterItem(session, catalog, sizes = sizeItems(catalog)) {
   const item = session.pendingItem;
-  const sizes = sizeItems(catalog);
   if (item && !isContainerItem(item) && !session.pendingSize && sizes.length) {
     session.step = STEPS.SIZE;
     return { session, ...sizeReply(item, sizes) };
@@ -659,12 +665,12 @@ function continueAfterItem(session, catalog) {
   return { session, ...qtyReply(displayItemName(session)) };
 }
 
-function beginEntry(session, match, { confirmFirst, catalog = [] } = {}) {
+function beginEntry(session, match, { confirmFirst, catalog = [], sizes } = {}) {
   if (!match?.entry) return null;
   if (match.entry.isGroup) {
     return beginGroup(session, match.entry, match.protein, match.style);
   }
-  return beginRegular(session, match.entry, { confirmFirst: confirmFirst !== false, catalog });
+  return beginRegular(session, match.entry, { confirmFirst: confirmFirst !== false, catalog, sizes });
 }
 
 /**
@@ -676,7 +682,7 @@ export function advanceChatOrder(sessionIn, userText, dishes, menuConfig, restau
   if (restaurantName != null && String(restaurantName).trim()) session.restaurantName = String(restaurantName).trim();
   if (!session.restaurantName) session.restaurantName = 'Melting Mango';
   const text = String(userText || '').trim();
-  const { items: catalog, categories } = prepareChatMenu(dishes);
+  const { items: catalog, categories, sizes } = prepareChatMenu(dishes);
 
   if (!text) {
     return { session, reply: 'Say a flavour, or tap Show menu.', actions: [{ id: 'menu', label: 'Show menu' }] };
@@ -722,7 +728,7 @@ export function advanceChatOrder(sessionIn, userText, dishes, menuConfig, restau
 
   const handlePick = (confirmFirst) => {
     const match = matchMenuItem(text, catalog);
-    if (match) return beginEntry(session, match, { confirmFirst, catalog });
+    if (match) return beginEntry(session, match, { confirmFirst, catalog, sizes });
     const multi = searchMenu(text, catalog);
     if (multi.length >= 2) {
       return {
@@ -794,11 +800,11 @@ export function advanceChatOrder(sessionIn, userText, dishes, menuConfig, restau
 
   if (session.step === STEPS.ITEM_READY) {
     if (isYes(text) || /^(order now|book|add)$/i.test(normalize(text))) {
-      return continueAfterItem(session, catalog);
+      return continueAfterItem(session, catalog, sizes);
     }
     const switched = handlePick(true);
     if (switched) return switched;
-    return continueAfterItem(session, catalog);
+    return continueAfterItem(session, catalog, sizes);
   }
 
   if (session.step === STEPS.SIZE) {
@@ -826,7 +832,6 @@ export function advanceChatOrder(sessionIn, userText, dishes, menuConfig, restau
         listStyle: 'dishes',
       };
     }
-    const sizes = sizeItems(catalog);
     const size = matchSize(text, sizes);
     if (!size) {
       const switched = handlePick(false);
