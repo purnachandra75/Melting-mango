@@ -53,8 +53,12 @@ h1, h2, h3, h4 { color: var(--y-brown); }
 
 /* ---------- Header ---------- */
 .nav, .nav--scrolled {
-  background: rgba(255, 248, 225, 0.92);
-  backdrop-filter: blur(12px);
+  background-color: #F0D496;
+  background-image: url('/images/hero-ice-bg.gif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+  backdrop-filter: none;
 }
 .nav--scrolled { box-shadow: 0 1px 0 var(--y-line); }
 .nav__links a { color: var(--y-text); }

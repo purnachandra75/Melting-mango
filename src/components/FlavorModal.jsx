@@ -53,7 +53,7 @@ export default function FlavorModal({ flavor, onClose }) {
           <h2 id="flavor-title">{flavor.name}</h2>
           <p>{flavor.description}</p>
           <div className="tags">
-            {flavor.tags.map((t) => (
+            {(flavor.tags || []).map((t) => (
               <span key={t} className="tag">{t}</span>
             ))}
           </div>

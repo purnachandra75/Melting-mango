@@ -47,9 +47,9 @@ export default function Hero() {
           <img
             className="r2-hero__ref"
             src={images.heroBowlCut}
-            alt="A speckled ceramic bowl piled with mango ice cream scoops, mango sauce, mango cubes, a cube-cut mango and leaves"
-            width="1030"
-            height="646"
+            alt="A speckled ceramic bowl piled with mango ice cream scoops, mango sauce, mango cubes and leaves"
+            width="477"
+            height="539"
           />
         </figure>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Scoop from '../Scoop';
 import { CONTAINERS, SCOOP_SIZES, flavorById, formatPrice } from '../../data/flavors';
 import { useLiveFlavors } from '../../hooks/useLiveFlavors';
@@ -8,16 +8,34 @@ const NUMERALS = ['I', 'II', 'III'];
 
 export default function ScoopBuilder() {
   const { addItem } = useCart();
-  const flavors = useLiveFlavors();
+  const { flavors } = useLiveFlavors();
   const [count, setCount] = useState(2);
   const [slots, setSlots] = useState(['mango', 'pista', 'chocolate']);
   const [containerId, setContainerId] = useState('waffle');
 
-  const chosen = slots.slice(0, count).map(flavorById);
+  useEffect(() => {
+    if (!flavors.length) return;
+    setSlots((prev) => {
+      const ids = flavors.map((f) => f.id);
+      const next = prev.map((id) => (ids.includes(id) ? id : ids[0]));
+      while (next.length < 3) next.push(ids[Math.min(next.length, ids.length - 1)]);
+      return next.slice(0, 3);
+    });
+  }, [flavors]);
+
+  const chosen = slots.slice(0, count).map(flavorById).filter(Boolean);
   const price = chosen.reduce((sum, f) => sum + f.price, 0);
   const top = chosen[chosen.length - 1];
 
   const setSlot = (index, id) => setSlots((s) => s.map((v, i) => (i === index ? id : v)));
+
+  if (!flavors.length || !chosen.length || !top) {
+    return (
+      <div className="builder">
+        <p className="builder__caption">Live scoops will appear here once the parlour menu is available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="builder">

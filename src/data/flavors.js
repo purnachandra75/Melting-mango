@@ -168,12 +168,46 @@ export const formatPrice = (n) =>
 
 const priceOverrides = new Map();
 const catalogListeners = new Set();
+/** null = not synced yet (show nothing live); Set = only these local flavour ids are on the Admin menu. */
+let liveFlavorIds = null;
+const extraFlavors = new Map();
+
+function notifyCatalog() {
+  catalogListeners.forEach((fn) => fn());
+}
 
 /** Overlay Restaurant Admin menu prices onto the local scoop catalog. */
 export function setMenuPriceOverrides(entries) {
   priceOverrides.clear();
   for (const [id, patch] of entries) priceOverrides.set(id, patch);
-  catalogListeners.forEach((fn) => fn());
+  notifyCatalog();
+}
+
+/**
+ * Replace the guest-facing scoop list with what Restaurant Admin currently publishes.
+ * Deleted / unavailable Admin items disappear here automatically.
+ */
+export function setLiveCatalog(entries) {
+  priceOverrides.clear();
+  extraFlavors.clear();
+  liveFlavorIds = new Set();
+  for (const entry of entries || []) {
+    const id = entry.id;
+    liveFlavorIds.add(id);
+    if (entry.base === 'local') {
+      priceOverrides.set(id, entry.patch || {});
+    } else {
+      extraFlavors.set(id, entry.flavor);
+    }
+  }
+  notifyCatalog();
+}
+
+export function clearLiveCatalog() {
+  liveFlavorIds = null;
+  priceOverrides.clear();
+  extraFlavors.clear();
+  notifyCatalog();
 }
 
 export function subscribeCatalog(fn) {
@@ -182,6 +216,9 @@ export function subscribeCatalog(fn) {
 }
 
 export function flavorById(id) {
+  if (liveFlavorIds && !liveFlavorIds.has(id)) return undefined;
+  const extra = extraFlavors.get(id);
+  if (extra) return extra;
   const base = flavors.find((f) => f.id === id);
   if (!base) return undefined;
   const patch = priceOverrides.get(id);
@@ -189,7 +226,15 @@ export function flavorById(id) {
 }
 
 export function catalogFlavors() {
-  return flavors.map((f) => flavorById(f.id));
+  if (liveFlavorIds) {
+    return [...liveFlavorIds].map((id) => flavorById(id)).filter(Boolean);
+  }
+  // Until the public API syncs, do not show the static fallback as "live Admin menu".
+  return [];
+}
+
+export function isCatalogLive() {
+  return liveFlavorIds instanceof Set;
 }
 
 export const containerById = (id) => CONTAINERS.find((c) => c.id === id);

@@ -15,7 +15,7 @@ export default function Menu() {
     'Flavours',
     "Browse Melting Mango’s small-batch flavours — Mango, Chocolate, Pista, Chickoo and Banana Split. Order scoops in a waffle cone, cup or sugar cone."
   );
-  const flavors = useLiveFlavors();
+  const { flavors, status, error } = useLiveFlavors();
   const [params, setParams] = useSearchParams();
   const active = AVAILABILITY.includes(params.get('a')) ? params.get('a') : 'All';
   const [query, setQuery] = useState('');
@@ -28,10 +28,11 @@ export default function Menu() {
     const q = query.trim().toLowerCase();
     return flavors.filter((f) => {
       const inFilter = active === 'All' || f.availability === active;
-      const inSearch = !q || `${f.name} ${f.notes} ${f.tags.join(' ')}`.toLowerCase().includes(q);
+      const tags = Array.isArray(f.tags) ? f.tags.join(' ') : '';
+      const inSearch = !q || `${f.name} ${f.notes || ''} ${tags}`.toLowerCase().includes(q);
       return inFilter && inSearch;
     });
-  }, [active, query]);
+  }, [flavors, active, query]);
 
   return (
     <>
@@ -69,7 +70,17 @@ export default function Menu() {
             </label>
           </div>
 
-          {visible.length ? (
+          {status === 'loading' ? (
+            <div className="empty" role="status">
+              <h2>Loading menu…</h2>
+              <p>Fetching live scoops from the parlour.</p>
+            </div>
+          ) : status === 'error' ? (
+            <div className="empty" role="alert">
+              <h2>Menu unavailable</h2>
+              <p>{error || 'Could not reach the restaurant menu API.'}</p>
+            </div>
+          ) : visible.length ? (
             <div className="flavor-grid">
               {visible.map((f, i) => (
                 <Reveal key={f.id} delay={(i % 4) * 70}>
@@ -80,7 +91,11 @@ export default function Menu() {
           ) : (
             <div className="empty" role="status">
               <h2>No scoops found</h2>
-              <p>Try a different search or filter.</p>
+              <p>
+                {status === 'empty'
+                  ? 'No scoops are published in Restaurant Admin yet.'
+                  : 'Try a different search or filter.'}
+              </p>
             </div>
           )}
         </div>

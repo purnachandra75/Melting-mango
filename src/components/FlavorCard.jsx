@@ -31,11 +31,11 @@ export default function FlavorCard({ flavor, onSelect }) {
       type="button"
       className="flavor-card"
       onClick={() => onSelect(flavor)}
-      aria-label={`View ${flavor.name}, ${formatPrice(flavor.price)} per scoop, rated ${flavor.rating} out of 5`}
+      aria-label={`View ${flavor.name}, ${formatPrice(flavor.price)} per scoop, rated ${Number(flavor.rating) || 0} out of 5`}
     >
       <div className="flavor-card__art">
         <img
-          src={flavor.photo}
+          src={flavor.photo || '/images/mango-scoops.webp'}
           alt=""
           width="640"
           height="480"
@@ -45,7 +45,7 @@ export default function FlavorCard({ flavor, onSelect }) {
         {seasonal && <span className="flavor-card__tag flavor-card__tag--seasonal">Seasonal</span>}
       </div>
       <div className="flavor-card__body">
-        <Stars rating={flavor.rating} />
+        <Stars rating={Number(flavor.rating) || 0} />
         <div className="flavor-card__top">
           <h2 className="flavor-card__name">{flavor.name}</h2>
           <span className="flavor-card__price">
@@ -61,7 +61,7 @@ export default function FlavorCard({ flavor, onSelect }) {
           </span>
         ) : null}
         <div className="flavor-card__foot">
-          <span>{flavor.tags[0]}</span>
+          <span>{flavor.tags?.[0] || flavor.category || 'Menu'}</span>
           <span className="flavor-card__plus" aria-hidden="true">+</span>
         </div>
       </div>
