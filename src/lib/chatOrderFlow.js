@@ -7,6 +7,7 @@
 import { displayCategoryName, sortCategories } from './categoryOrder.js';
 import { groupMenuDishes, parseSpiceText, normStyle } from './groupMenuDishes.js';
 import { youWillEarnLabel } from './loyalty';
+import { handleLoyaltyStep, isLoyaltyStep, loyaltyChatEnabled, loyaltyConfirmLine, loyaltyOrderFields, startLoyaltyOffer } from './chatLoyalty';
 
 export const STEPS = {
   IDLE: 'idle',
@@ -463,7 +464,7 @@ function confirmReply(session) {
     : `${session.guest.orderType} at ${PICKUP_ADDRESS.replace(/^Pickup at /, '')}`;
   return {
     session,
-    reply: `${formatCart(session.cart, session.menuConfig)}\n\n${session.guest.name} · ${session.guest.phone}\n${typeLine}\n\nPlace this order?`,
+    reply: `${formatCart(session.cart, session.menuConfig)}\n\n${session.guest.name} · ${session.guest.phone}\n${typeLine}${loyaltyConfirmLine(session)}\n\nPlace this order?`,
     actions: [
       { id: 'confirm:yes', label: 'Place order' },
       { id: 'cancel', label: 'Cancel' },
@@ -472,7 +473,7 @@ function confirmReply(session) {
 }
 
 function isCheckoutLocked(step) {
-  return step === STEPS.PHONE || step === STEPS.NAME || step === STEPS.ORDER_TYPE || step === STEPS.ADDRESS || step === STEPS.CONFIRM;
+  return step === STEPS.PHONE || step === STEPS.NAME || step === STEPS.ORDER_TYPE || step === STEPS.ADDRESS || step === STEPS.CONFIRM || isLoyaltyStep(step);
 }
 
 function cartTotal(cart) {
@@ -942,11 +943,15 @@ export function advanceChatOrder(sessionIn, userText, dishes, menuConfig, restau
     };
   }
 
+  const loyaltyTurn = handleLoyaltyStep(session, text);
+  if (loyaltyTurn) return loyaltyTurn;
+
   if (session.step === STEPS.PHONE) {
     if (!looksLikePhone(text)) {
       return { session, reply: 'Please share a valid phone number (10+ digits).' };
     }
     session.guest.phone = text.replace(/\s+/g, ' ').trim();
+    if (loyaltyChatEnabled(session)) return startLoyaltyOffer(session);
     session.step = STEPS.NAME;
     return { session, reply: 'And your name?' };
   }
@@ -1029,6 +1034,7 @@ export function buildOrderPayload(session) {
       price: l.price,
       spicyLevel: l.spicyLevel,
     })),
+    ...loyaltyOrderFields(session),
   };
 }
 

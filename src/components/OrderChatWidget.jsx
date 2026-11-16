@@ -6,6 +6,7 @@ import {
   STEPS,
 } from '../lib/chatOrderFlow';
 import { createOrder } from '../lib/restaurantApi';
+import { loyaltyPlacedText, runChatLoyaltyEffect } from '../lib/chatLoyalty';
 import { earnPointsLabel } from '../lib/loyalty';
 
 function Icon({ children, size = 16 }) {
@@ -153,10 +154,23 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
       const result = advanceChatOrder(session, mapped, dishes, menuConfig, shopName);
       setSession(result.session);
 
-      if (result.readyToSubmit) {
+      if (result.loyaltyEffect) {
+        const next = await runChatLoyaltyEffect(result);
+        setSession(next.session);
+        pushAssistant(next.reply, next.actions || []);
+      } else if (result.readyToSubmit) {
         pushAssistant(result.reply, []);
         const payload = buildOrderPayload(result.session);
-        const order = await createOrder(payload);
+        let order;
+        try {
+          order = await createOrder(payload);
+        } catch (orderErr) {
+          if (orderErr?.status === 401 && payload.redeemPoints) {
+            setSession({ ...result.session, loyalty: null });
+            throw new Error('Your points check expired, so the order was not placed. Tap Retry to place it without points');
+          }
+          throw orderErr;
+        }
         const code = order.code || order.orderId || '';
         const done = createEmptySession();
         done.step = STEPS.COMPLETE;
@@ -167,6 +181,7 @@ export default function OrderChatWidget({ dishes = [], menuConfig = null, restau
           code ? `Order placed · ${code}.` : 'Order placed.',
           token ? `Your ${kind ? kind.toLowerCase() : 'pickup'} token is ${token}. Show it at the counter when you collect your order.` : '',
           !token && kind === 'Delivery' ? 'We’ll call you if we need anything for the delivery.' : '',
+          loyaltyPlacedText(order, result.session),
         ].filter(Boolean).join(' ');
         pushAssistant(confirm, [
           { id: 'order', label: 'Order again' },
