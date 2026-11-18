@@ -11,6 +11,9 @@ import { MenuConfigContext } from './context/MenuConfigContext';
 import { useCart } from './context/CartContext';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
+import Offers from './pages/Offers';
+import GiftCardBuy from './pages/GiftCardBuy';
+import GiftCardThanks from './pages/GiftCardThanks';
 import Story from './pages/Story';
 import Visit from './pages/Visit';
 import NotFound from './pages/NotFound';
@@ -57,6 +60,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/offers" element={<Offers />} />
+          <Route path="/gift-cards/:id" element={<GiftCardBuy />} />
+          <Route path="/gift-card-thanks" element={<GiftCardThanks />} />
           <Route path="/story" element={<Story />} />
           <Route path="/visit" element={<Visit />} />
           <Route path="*" element={<NotFound />} />

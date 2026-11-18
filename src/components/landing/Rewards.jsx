@@ -1,11 +1,11 @@
 import Reveal from '../Reveal';
 import { REWARDS, REWARD_RULES, flavors } from '../../data/flavors';
 
-function FoundingVisual() {
+function FoundingVisual({ memberLimit = 50, weeklyRewards = 12 }) {
   return (
     <div className="reward__visual reward__visual--founding">
-      <span className="reward__big">50</span>
-      <span className="reward__sub">guests · 12 weeks of free scoops</span>
+      <span className="reward__big">{memberLimit}</span>
+      <span className="reward__sub">guests · {weeklyRewards} weeks of free scoops</span>
     </div>
   );
 }
@@ -24,7 +24,7 @@ function PassportVisual({ stamps }) {
           );
         })}
       </div>
-      <span className="reward__sub">6 distinct flavours → 1 free scoop</span>
+      <span className="reward__sub">{stamps} distinct flavours → 1 free scoop</span>
     </div>
   );
 }
@@ -44,19 +44,23 @@ function PointsVisual() {
   );
 }
 
-export default function Rewards() {
+/**
+ * Reward programmes. `rewards` comes from the restaurant's settings (API);
+ * the static list in data/flavors.js is only used if the API cannot be reached.
+ */
+export default function Rewards({ rewards = REWARDS }) {
   return (
     <div className="rewards">
-      {REWARDS.map((r, i) => (
+      {rewards.map((r, i) => (
         <Reveal as="article" className={`reward ${r.ribbon ? 'reward--featured' : ''}`} key={r.id} delay={i * 120}>
           {r.ribbon && <span className="reward__ribbon">{r.ribbon}</span>}
           <span className="reward__numeral">{r.numeral}</span>
           <h3>{r.name}</h3>
           <p className="reward__tagline">{r.tagline}</p>
 
-          {r.id === 'founding-50' && <FoundingVisual />}
-          {r.id === 'flavor-passport' && <PassportVisual stamps={r.stamps} />}
-          {r.id === 'mango-points' && <PointsVisual />}
+          {r.type === 'founding' && <FoundingVisual memberLimit={r.memberLimit} weeklyRewards={r.weeklyRewards} />}
+          {r.type === 'stamp_card' && <PassportVisual stamps={r.stamps || 6} />}
+          {r.type === 'points' && <PointsVisual />}
 
           <p className="reward__highlight">{r.highlight}</p>
 
@@ -64,7 +68,7 @@ export default function Rewards() {
             {REWARD_RULES.map((rule) => (
               <div key={rule}>
                 <dt>{rule}</dt>
-                <dd>{r.rules[rule]}</dd>
+                <dd>{r.rules?.[rule]}</dd>
               </div>
             ))}
           </dl>

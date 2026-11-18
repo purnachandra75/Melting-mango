@@ -118,6 +118,7 @@ export default function Home() {
               <p className="r2-passport__desc">{PASSPORT.tagline}. Enrol once at the counter or online, and we’ll keep track.</p>
             </div>
             <Link to="/visit" className="r2-btn r2-btn--white">Enrol at a Parlour <Arrow /></Link>
+            <Link to="/offers#rewards" className="r2-passport__more">See all rewards</Link>
           </Reveal>
         </div>
       </section>

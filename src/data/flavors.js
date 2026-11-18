@@ -116,6 +116,7 @@ export const REWARD_RULES = ['Enrollment', 'Reward', 'Qualification', 'Limit', '
 export const REWARDS = [
   {
     id: 'founding-50',
+    type: 'founding',
     numeral: 'I',
     name: 'Founding 50',
     tagline: 'For our first fifty guests',
@@ -132,6 +133,7 @@ export const REWARDS = [
   },
   {
     id: 'flavor-passport',
+    type: 'stamp_card',
     numeral: 'II',
     name: 'Flavor Passport',
     tagline: 'Taste your way around the menu',
@@ -148,6 +150,7 @@ export const REWARDS = [
   },
   {
     id: 'mango-points',
+    type: 'points',
     numeral: 'III',
     name: 'Mango Points',
     tagline: 'Every visit adds up',

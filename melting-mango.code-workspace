@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../Restaurant-Admin"
+		},
+		{
+			"path": "../Restaurant-Server"
 		}
 	],
 	"settings": {}

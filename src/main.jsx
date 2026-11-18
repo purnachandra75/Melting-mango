@@ -12,6 +12,7 @@ import './styles/ref2.css';
 import './styles/side-decor.css';
 import './styles/footer.css';
 import './styles/chat.css';
+import './styles/offers.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
