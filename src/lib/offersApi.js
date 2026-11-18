@@ -44,3 +44,24 @@ export async function fetchGiftCardOrder(orderId, sessionId) {
   const data = await readJson(res);
   return data.order;
 }
+
+/**
+ * Bag: check a gift card number + PIN and learn how much of the order it covers.
+ * Resolves with { code, balance, currency, taxRate, estimate }; rejects with the server's message.
+ */
+export async function checkGiftCardForBag({ code, pin, subtotal }) {
+  const res = await fetch(`${siteBase()}/gift-card/check`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, pin, subtotal }),
+  });
+  const data = await readJson(res);
+  return data.card;
+}
+
+/** Balance, expiry and status for the card behind a QR code (no PIN needed, nothing private is returned). */
+export async function fetchGiftCardBalance(code, signal) {
+  const res = await fetch(`${siteBase()}/gift-card-balance/${encodeURIComponent(code)}`, { cache: 'no-store', signal });
+  const data = await readJson(res);
+  return data.card;
+}

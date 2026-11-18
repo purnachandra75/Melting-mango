@@ -144,20 +144,35 @@ export default function GiftCardThanks() {
           </p>
         </header>
 
-        <p className="gthanks__note" role="status">{note} Keep the card number{o.cards.some((c) => c.pin) ? ' and PIN' : ''} safe &mdash; show {o.cards.some((c) => c.pin) ? 'them' : 'it'} at the counter to use the balance.</p>
+        <p className="gthanks__note" role="status">{note} The PIN is kept off the card for safety, so it is shown below and sent in a separate PDF to the recipient. Show the card number and PIN at the counter to use the balance.</p>
 
         <div className="gthanks__list">
           {o.cards.map((c) => (
             <article key={c.id} className="gthanks__faces" ref={(el) => { facesRef.current[c.id] = el; }}>
               <div className="gthanks__face" data-face="front">
-                <GiftCardArt card={program || FALLBACK_ART} value={{ amount: c.value, bonusAmount: 0 }} />
+                <GiftCardArt card={program || FALLBACK_ART} value={{ amount: c.value, bonusAmount: 0 }} code={c.code} />
               </div>
               <div className="gthanks__face" data-face="back">
-                <GiftCardBack code={c.code} pin={c.pin} value={c.value} currency={o.currency} expiresAt={c.expiresAt} />
+                <GiftCardBack code={c.code} value={c.value} currency={o.currency} expiresAt={c.expiresAt} />
               </div>
             </article>
           ))}
         </div>
+
+        {o.cards.some((c) => c.pin) ? (
+          <div className="gthanks__pins" aria-label="Gift card PINs">
+            <h2 className="gthanks__pins-title">PIN for each card</h2>
+            <p className="gthanks__pins-note">Keep these private. They are not on the card.</p>
+            <dl>
+              {o.cards.filter((c) => c.pin).map((c) => (
+                <div key={c.id}>
+                  <dt>{c.code}</dt>
+                  <dd>{c.pin}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ) : null}
 
         {fileError ? <p className="gbuy__notice gbuy__notice--error" role="alert">{fileError}</p> : null}
 

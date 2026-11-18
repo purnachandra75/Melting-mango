@@ -385,6 +385,23 @@ html .gcard__word {
   object-fit: contain;
   border-radius: 50%;
 }
+.gcard__qrfront {
+  position: absolute;
+  z-index: 1;
+  top: 0.8em;
+  right: 0.8em;
+  width: 4.2em;
+  height: 4.2em;
+  padding: 0.3em;
+  border-radius: 0.5em;
+  background: #fff;
+  box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.2);
+}
+.gcard__qrfront svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .gcard__foot {
   position: absolute;
   z-index: 1;
@@ -438,13 +455,42 @@ html .gcard__word {
   top: 4.3em;
   bottom: 1em;
   display: flex;
+  gap: 0.8em;
+  align-items: stretch;
+}
+.gcard__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+/* QR code: opens the balance page (number, expiry, balance left). */
+.gcard__qr {
+  flex: 0 0 5.6em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.gcard__qr svg {
+  width: 5.2em;
+  height: 5.2em;
+  border-radius: 0.3em;
+  display: block;
+}
+.gcard__qrtext {
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a5a1c;
+  white-space: nowrap;
 }
 .gcard__row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6em 1.8em;
+  gap: 0.6em 1.1em;
 }
 .gcard__field {
   display: grid;
@@ -463,18 +509,18 @@ html .gcard__pin {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
 }
 .gcard__number {
-  font-size: 1.28em;
+  font-size: 1.02em;
   font-weight: 800;
   letter-spacing: 0.06em;
   white-space: nowrap;
 }
 .gcard__pin {
-  font-size: 1.15em;
+  font-size: 1em;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
 .gcard__pin--small {
-  font-size: 0.9em;
+  font-size: 0.8em;
   letter-spacing: 0.02em;
 }
 .gcard__fine {
@@ -1150,3 +1196,155 @@ html .gcard__pin {
     width: 100%;
   }
 }
+
+/* Gift card balance page (opened from the QR code on a card) */
+.gbal {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 2.5rem 0 1.5rem;
+  display: grid;
+  gap: var(--space-4, 1.25rem);
+  justify-items: center;
+  text-align: center;
+}
+.gbal__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+}
+.gbal__card {
+  width: 100%;
+  margin: 0;
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.4rem 1.2rem;
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 10px 28px -14px rgba(58, 15, 1, 0.45);
+  text-align: left;
+}
+.gbal__card > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(58, 29, 6, 0.1);
+  padding-bottom: 0.6rem;
+}
+.gbal__card > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.gbal__card dt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a5a1c;
+}
+.gbal__card dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+.gbal__amount {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #3a1d06;
+}
+html .gbal__code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  letter-spacing: 0.05em;
+}
+.gbal__status {
+  display: inline-block;
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: #e6f6ea;
+  color: #1c6b34;
+}
+.gbal__status--used,
+.gbal__status--expired,
+.gbal__status--void {
+  background: #fbe9e7;
+  color: #a1281b;
+}
+/* PIN block on the thanks page, outside the card */
+.gthanks__pins {
+  max-width: 28rem;
+  margin: 1.5rem auto 0;
+  padding: 1.1rem 1.2rem;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 10px 28px -14px rgba(58, 15, 1, 0.45);
+}
+.gthanks__pins-title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.gthanks__pins-note {
+  margin: 0.3rem 0 0.8rem;
+  font-size: 0.9rem;
+  color: #6b4a1f;
+}
+.gthanks__pins dl {
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.gthanks__pins dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.gthanks__pins dt,
+.gthanks__pins dd {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 700;
+}
+.gthanks__pins dd {
+  letter-spacing: 0.1em;
+  font-size: 1.1rem;
+}
+
+/* ---------- Bag: gift card at checkout ---------- */
+.drawer__foot { max-height: calc(100vh - 260px); max-height: calc(100dvh - 260px); overflow-y: auto; }
+.drawer__row--gift { color: #1f7a45; font-weight: 600; }
+.drawer__gclink { background: none; border: 0; padding: 0; font: inherit; font-weight: 600; color: var(--mango); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.drawer__gcopen { display: block; margin: -6px 0 16px; font-size: 0.84rem; }
+.drawer__gc { margin: -6px 0 6px; padding: 14px 14px 4px; border: 1px dashed #eadcc8; border-radius: 14px; background: #fffaf2; }
+.drawer__gcbtns { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; font-size: 0.84rem; }
+.drawer__gcbtns .btn { padding: 8px 16px; font-size: 0.85rem; }
+.drawer__gcerr { margin: 0 0 10px; font-size: 0.8rem; color: #b3261e; }
+.drawer__gcnote { margin: -8px 0 16px; font-size: 0.76rem; color: var(--stone); }
+.drawer__gcnote .drawer__gclink { font-size: 0.76rem; }
+/* ---------- Bag: rewards ---------- */
+.drawer__field select { height: 42px; border: 1px solid #eadcc8; border-radius: 12px; padding: 0 10px; font: inherit; font-weight: 500; background: #fff; }
+.drawer__rw { margin: 0 0 14px; padding: 12px 14px 4px; border: 1px dashed #eadcc8; border-radius: 14px; background: #fffaf2; }
+.drawer__rwhead { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; font-size: 0.8rem; font-weight: 700; color: var(--ink); }
+.drawer__rwhead .drawer__gclink { font-size: 0.76rem; }
+.drawer__check { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer; }
+.drawer__check input { margin-top: 3px; accent-color: var(--mango); }
+.drawer__check small { font-weight: 500; color: var(--stone); }
+.drawer__rw .drawer__gcnote { margin: 0 0 10px; }
+
+/* ---------- Rewards page: my rewards ---------- */
+.myrw { max-width: 760px; margin: 0 auto 2.2rem; padding: 1.4rem 1.5rem 1.2rem; border-radius: 1.2rem; background: #fff; box-shadow: 0 10px 28px -16px rgba(58, 15, 1, 0.45); }
+.myrw h3 { margin: 0; font-size: 1.25rem; }
+.myrw h4 { margin: 0; font-size: 1rem; }
+.myrw__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.6rem; }
+.myrw__line { margin: 0.3rem 0 0.8rem; font-size: 0.88rem; color: var(--stone); }
+.myrw__ok { margin: 0 0 0.8rem; font-size: 0.88rem; font-weight: 600; color: #1f7a45; }
+.myrw__ready { margin: 0.4rem 0 1rem; padding: 0.9rem 1rem; border-radius: 1rem; background: var(--mango-soft); display: grid; gap: 0.5rem; }
+.myrw__ready .btn { justify-self: start; }
+.myrw__reward { display: grid; gap: 2px; font-size: 0.86rem; }
+.myrw__reward span { color: var(--ink-soft); font-size: 0.8rem; }
+.myrw__prog { padding: 0.9rem 0; border-top: 1px solid var(--line); }
+.myrw__proghead { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.myrw__proghead .btn { padding: 6px 16px; font-size: 0.85rem; }
+.myrw__badge { padding: 3px 10px; border-radius: 999px; background: #e3f4e9; color: #1f7a45; font-size: 0.75rem; font-weight: 700; }
+.myrw__badge--off { background: #f3e5e5; color: #b3261e; }
+.myrw__stamps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.6rem; }
+.myrw__stamp { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 2px dashed #e2cfb4; color: #b9a283; font-size: 0.8rem; font-weight: 700; }
+.myrw__stamp.is-on { border: 2px solid var(--mango); background: var(--mango); color: #fff; }

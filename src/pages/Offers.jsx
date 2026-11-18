@@ -7,6 +7,7 @@ import { fetchCoupons, fetchGiftCards, fetchOffers, fetchRewards } from '../lib/
 import { resolveMenuImage } from '../lib/restaurantApi';
 import GiftCardGrid from '../components/GiftCardGrid';
 import Rewards from '../components/landing/Rewards';
+import RewardsAccount from '../components/RewardsAccount';
 import { REWARDS } from '../data/flavors';
 
 const CHANNEL_LABEL = {
@@ -261,8 +262,9 @@ export default function Offers() {
             id="rewards"
             eyebrow="Rewards"
             title="Mango rewards"
-            text="Free scoops and points for our regulars. Ask us at the counter to get started."
+            text="Free scoops and points for our regulars. Join online or ask us at the counter."
           />
+          <RewardsAccount />
           {rewards.status === 'error' ? (
             // Could not reach the server: show the built-in programme details instead of an empty page.
             <Rewards rewards={REWARDS} />

@@ -44,6 +44,15 @@ function PointsVisual() {
   );
 }
 
+function CustomVisual() {
+  return (
+    <div className="reward__visual reward__visual--founding">
+      <span className="reward__big" aria-hidden="true">★</span>
+      <span className="reward__sub">Special reward</span>
+    </div>
+  );
+}
+
 /**
  * Reward programmes. `rewards` comes from the restaurant's settings (API);
  * the static list in data/flavors.js is only used if the API cannot be reached.
@@ -61,6 +70,7 @@ export default function Rewards({ rewards = REWARDS }) {
           {r.type === 'founding' && <FoundingVisual memberLimit={r.memberLimit} weeklyRewards={r.weeklyRewards} />}
           {r.type === 'stamp_card' && <PassportVisual stamps={r.stamps || 6} />}
           {r.type === 'points' && <PointsVisual />}
+          {r.type === 'custom' && <CustomVisual />}
 
           <p className="reward__highlight">{r.highlight}</p>
 

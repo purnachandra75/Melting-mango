@@ -1,4 +1,6 @@
 import { backgroundFor } from '../data/giftCardDesigns';
+import QrCode from './QrCode';
+import { giftCardBalanceUrl } from '../lib/giftCardUrl';
 
 function money(n) {
   const x = Number(n) || 0;
@@ -8,8 +10,9 @@ function money(n) {
 /**
  * One gift card face: logo in the corner, the occasion in the middle with "Gift Card" under it,
  * over the owner's uploaded background (or a colour). Set up by the owner in Restaurant Admin.
+ * When `code` is given (a sold card), a QR code in the top-right corner opens its balance page.
  */
-export default function GiftCardArt({ card, value, mini = false }) {
+export default function GiftCardArt({ card, value, mini = false, code = '' }) {
   const image = String(card.designImage || '').trim();
   const occasion = String(card.occasion || '').trim();
   const bonus = value && value.bonusAmount > 0 ? value.bonusAmount : 0;
@@ -24,6 +27,11 @@ export default function GiftCardArt({ card, value, mini = false }) {
       <span className="gcard__logo">
         <img src="/images/melting-logo.png" alt="Melting Mango" width="64" height="64" decoding="async" />
       </span>
+      {code ? (
+        <div className="gcard__qrfront">
+          <QrCode value={giftCardBalanceUrl(code)} label="Scan to see this card's balance and expiry date" />
+        </div>
+      ) : null}
       <div className="gcard__mid">
         {occasion ? <span className="gcard__occ">{occasion}</span> : null}
         <span className={occasion ? 'gcard__word' : 'gcard__occ'}>Gift Card</span>

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { CartProvider } from './context/CartContext';
+import { RewardsProvider } from './context/RewardsContext';
 import './styles/index.css';
 import './styles/landing.css';
 import './styles/hero.css';
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <CartProvider>
-        <App />
+        <RewardsProvider>
+          <App />
+        </RewardsProvider>
       </CartProvider>
     </BrowserRouter>
   </React.StrictMode>
